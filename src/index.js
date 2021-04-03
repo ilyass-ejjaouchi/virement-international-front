@@ -4,21 +4,22 @@ import './index.css';
 import App from './App';
 import "bootstrap/dist/css/bootstrap.css";
 import reportWebVitals from './reportWebVitals';
-import { createStore, combineReducers } from 'redux'
-import { reducer as formReducer } from 'redux-form'
+import {createStore, combineReducers, applyMiddleware} from 'redux'
 import {Provider} from "react-redux";
+import dialogReducer from './Reducers/DialogReducer'
+import {logger} from "redux-logger/src";
 
 const rootReducer = combineReducers({
-    form: formReducer
+    dialogReducer: dialogReducer
 })
-const store = createStore(rootReducer)
+const store = createStore(dialogReducer, applyMiddleware(logger))
 
 ReactDOM.render(
+    <Provider store={store}>
     <React.StrictMode>
-        <Provider store={store}>
              <App/>
-        </Provider>
-    </React.StrictMode>,
+    </React.StrictMode>
+    </Provider>,
     document.getElementById('root')
 );
 

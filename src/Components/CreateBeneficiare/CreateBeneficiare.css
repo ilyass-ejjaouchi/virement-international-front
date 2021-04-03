@@ -11,11 +11,10 @@
     font-style: italic;
     color: #e94b4b;
 }
-.btnEnvoyer{
-    border-color: #f1aa6e !important;
-    background-color: #f1aa6e !important ;
-    border-radius: 0 !important;
-}
 hr{
     background-color: #f1aa6e;
+}
+.spinner{
+    margin-top: 20%;
+    margin-left:40%;
 }

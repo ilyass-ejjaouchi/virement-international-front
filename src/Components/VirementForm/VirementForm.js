@@ -8,17 +8,18 @@ class VirementForm extends Component {
     render() {
         return <div>
             <Form>
-                <Form.Group controlId="exampleForm.SelectCustom">
+                <Form.Group controlId="exampleForm.SelectCustom"><br/>
+                    <h4>Virements</h4><hr/>
                     <Row>
                         <Col>
                             <h6>Compte à débiter</h6><hr/>
-                            <Form.Control  as="select">
+                            <Form.Control size="sm" as="select">
                                 <option>Veuillez choisir le compte à débiter </option>
                             </Form.Control>
                         </Col>
                         <Col>
                             <h6>Compte à créditer</h6><hr/>
-                            <Form.Control  as="select">
+                            <Form.Control size="sm" as="select">
                                 <option>Veuillez choisir le compte à créditer </option>
                             </Form.Control>
                         </Col>
@@ -26,7 +27,7 @@ class VirementForm extends Component {
                     <h6>Virement</h6> <hr/>
                     <Row>
                         <Col>
-                            <Form.Control  as="select">
+                            <Form.Control size="sm" as="select">
                                 <option>Veuillez choisir le type de virement </option>
                                 <option>Virement commercial</option>
                                 <option>virement financier </option>
@@ -35,25 +36,25 @@ class VirementForm extends Component {
                     </Row><br/>
                     <Row>
                         <Col>
-                            <Form.Control  type="text" name="date"
+                            <Form.Control size="sm" type="text" name="date"
                                           onFocus={ (e)=> {e.currentTarget.type = "date";}}
                                           onBlur={ (e)=> {e.currentTarget.type = "text";}}
                                           placeholder="Date d'exécution"/>
                         </Col>
                         <Col>
-                            <Form.Control  as="select">
+                            <Form.Control size="sm"  as="select">
                                 <option>Veuillez choisir la devise </option>
                             </Form.Control>
                         </Col>
-                        <Col><Form.Control  type="number" placeholder="Montant"/></Col>
-                        <Col><Form.Control  type="number" placeholder="Contre Valeur"/></Col>
+                        <Col><Form.Control size="sm" type="number" placeholder="Montant"/></Col>
+                        <Col><Form.Control size="sm"  type="number" placeholder="Contre Valeur"/></Col>
                     </Row><br/>
                     <Row>
                         <Col>
-                            <Form.Control  type="text" placeholder="Motif"/>
+                            <Form.Control size="sm" type="text" placeholder="Motif"/>
                         </Col>
                         <Col>
-                            <Form.Control  type="text" placeholder="Réference Client"/>
+                            <Form.Control size="sm" type="text" placeholder="Réference Client"/>
                         </Col>
                     </Row><br/>
                     <h6>Instruction du client</h6><hr/>
@@ -67,7 +68,7 @@ class VirementForm extends Component {
                     <h6>change/Justificatif</h6><hr/>
                     <Row>
                         <Col sm={4}><h7>Mode d'imputation des frais :</h7></Col>
-                        <Col sm={2}><Form.Check type="radio" label="SHA"/></Col>
+                        <Col sm={2}><Form.Check size="sm" type="radio" label="SHA"/></Col>
                         <Col sm={2}><Form.Check type="radio" label="SHA"/></Col>
                         <Col sm={2}><Form.Check type="radio" label="SHA"/></Col>
                     </Row><br/>
@@ -97,7 +98,7 @@ class VirementForm extends Component {
                         <Col><Form.Control  type="text" placeholder="Organisme hospitalier "/></Col>
                         <Col><Form.Control  type="text" placeholder="Période de couverture"/></Col>
                     </Row><br/>
-                    <Button className="submitBtn" type="submit" variant="primary">Primary</Button>
+                    <Button className="btnEnvoyer" size="sm" type="submit" variant="primary">Envoyer</Button>
                 </Form.Group>
             </Form>
         </div>
