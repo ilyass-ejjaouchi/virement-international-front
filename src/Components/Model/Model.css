@@ -1,7 +1,12 @@
-.continue{
+.continueSuccess{
     right: 0 !important;
-    border-color: #f1aa6e !important;
-    background-color: #f1aa6e !important ;
+    border-color: #39b07a !important;
+    background-color: #39B07A !important ;
+}
+.continueDanger{
+    right: 0 !important;
+    border-color: #f85858 !important;
+    background-color: #f85858 !important ;
 }
 .fermer{
     border-color: #5d5a5a !important;

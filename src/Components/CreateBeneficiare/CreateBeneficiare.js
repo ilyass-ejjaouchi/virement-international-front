@@ -25,7 +25,7 @@ class CreateBeneficiare extends Component {
         this.getCountries();
     }
 
-    getDevises(){
+  getDevises(){
         axios.get('https://api.exchangeratesapi.io/latest')
             .then( response => {
                 this.setState({devises: [response.data.base, ...Object.keys(response.data.rates)]})
@@ -54,7 +54,7 @@ class CreateBeneficiare extends Component {
             routing: this.state.routing
         }
         console.log(data);
-        axios.post('http://localhost:8080/beneficiares', data )
+        axios.post('http://localhost:8081/beneficiares', data )
             .then(function (response) {
                 this.setState({isLoading:false});
             })
@@ -64,7 +64,7 @@ class CreateBeneficiare extends Component {
 
     }
     getBanques(){
-        axios.get('http://localhost:8080/banques')
+        axios.get('http://localhost:8081/banques')
             .then( response => {
                 this.setState({banques: response.data});}
             )
@@ -145,8 +145,10 @@ class CreateBeneficiare extends Component {
                         <Form.Label>Type</Form.Label>
                         <Form.Control size="sm"  as="select" name="type" onChange={this.handleOnChange} className="input">
                             <option value="">choisir le type</option>
-                            <option value="Autre">Autre</option>
-                            <option value="Autre2">Autre2</option>
+                            <option>Bénéficiaire</option>
+                            <option>Autre</option>
+                            <option>Fournisseur</option>
+                            <option>Salarié</option>
                         </Form.Control>
                     </Col>
                     <Col>

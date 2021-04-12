@@ -6,13 +6,15 @@ import "bootstrap/dist/css/bootstrap.css";
 import reportWebVitals from './reportWebVitals';
 import {createStore, combineReducers, applyMiddleware} from 'redux'
 import {Provider} from "react-redux";
-import dialogReducer from './Reducers/DialogReducer'
+import dialogReducer from './Reducers/DialogReducer';
+import VirementReducer from "./Reducers/VirementReducer";
 import {logger} from "redux-logger/src";
+import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
-    dialogReducer: dialogReducer
+    dialogReducer,form: formReducer,VirementReducer
 })
-const store = createStore(dialogReducer, applyMiddleware(logger))
+const store = createStore(rootReducer, applyMiddleware(logger))
 
 ReactDOM.render(
     <Provider store={store}>

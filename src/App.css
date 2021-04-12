@@ -7,3 +7,6 @@
     background-color: #f1aa6e !important ;
     width: 180px;
 }
+.btnEnvoyer:disabled{
+    cursor: not-allowed;
+}

@@ -7,7 +7,7 @@ import './CustomNavbar.css';
 class CustomNavbar extends Component {
     render() {
         return <Navbar bg="light" variant="light">
-            <Navbar.Brand href="#home"><img src={logo} alt="logo" className="logo"/></Navbar.Brand>
+            <Navbar.Brand as={Link} to="/"><img src={logo} alt="logo" className="logo"/></Navbar.Brand>
             <Nav className="mr-auto">
                 <Nav.Link  as={Link} to="/" className="lien" >Acceuil</Nav.Link>
                 <Nav.Link  as={Link} to="/virements" className="lien">Virements</Nav.Link>
