@@ -9,11 +9,17 @@ import {
     getComptes,
     getRates,
     selectCompteCredite,
-    selectCompteDebite
+    selectCompteDebite, selectDateExecution
 } from "../../Actions/VirementActions";
 import {openDialog} from "../../Actions/DialogActions";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import {renderSelectField,renderCheckboxField,renderField} from "../../redux-form-const";
+import {
+    renderSelectField,
+    renderCheckboxField,
+    renderField,
+    renderDatePicker
+} from "../../redux-form-const";
+import moment from "moment";
 
 function mapDispatchToProps(dispatch) {
     return {getComptes: comptes => dispatch(getComptes(comptes)),
@@ -21,12 +27,14 @@ function mapDispatchToProps(dispatch) {
             selectCompteDebite: id => dispatch(selectCompteDebite(id)),
             selectCompteCredite: id => dispatch(selectCompteCredite(id)),
             openDialog: o => dispatch(openDialog(o)),
-            fetchingData: fetching => dispatch(fetchingData(fetching))
+            fetchingData: fetching => dispatch(fetchingData(fetching)),
+            selectDateExecution: date => dispatch(selectDateExecution(date))
     }};
 const mapStateToProps = state => {
     return {
             comptesCredite: state.VirementReducer.comptesCredite,
             comptesDebite: state.VirementReducer.comptesDebite,
+            date: state.VirementReducer.date,
             comptes: state.VirementReducer.comptes,
             rates: state.VirementReducer.rates,
             createVirement: state.form.createVirement,
@@ -38,23 +46,22 @@ class CreateVirement extends Component {
 
     constructor() {
         super();
-        this.state = {
-            isFetching: false
-        }
     }
     fetchComptes(){
+        let that = this;
         axios.get('http://localhost:8081/comptes')
             .then( response => {
                 this.props.getComptes(response.data)
             })
-            .catch(error => {});
+            .catch(error => {that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger"})});
     }
     fetchRates(){
+        let that = this;
         axios.get('http://localhost:8081/comptes/currencies')
             .then( response => {
                 this.props.getRates(response.data);
             })
-            .catch(error => {});
+            .catch(error => {that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger"})});
     }
 
     convertMontant = (e)=>{
@@ -74,10 +81,10 @@ class CreateVirement extends Component {
             .then(function (response) {
                 that.props.fetchingData(false)
                 that.props.reset();
-                this.props.openDialog({body: "les données ont bien été enregistrées", show: true, title: "Succès", style:"success"})
+                that.props.openDialog({body: "les données ont bien été enregistrées", show: true, title: "Succès", style:"success"})
             })
             .catch(function (error) {
-                console.log(error);
+                that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger"})
             });
     }
 
@@ -87,24 +94,26 @@ class CreateVirement extends Component {
     }
 
     onSelectCompteDebiter(e){
-        const id = e.target.value
-        const compte = this.props.comptes.find(c => c.numeroCompte === parseInt(id));
-        this.props.selectCompteDebite(compte);
-        this.props.change('refClient', compte.client.referenceClient);
+        const id = e.target.value;
+        const currentCompteDebite = this.props.comptes.find(c => c.numeroCompte === parseInt(id))
+        this.props.selectCompteDebite(currentCompteDebite);
+        this.props.change('refClient', currentCompteDebite.client.referenceClient);
     }
 
     onSelectDeviseChange = (e)=>{
         console.log(e.target.value)
     }
-
+    onSelectDateExecution  = (e)=> {
+        this.props.selectDateExecution(moment(e).format('YYYY-MM-DD'));
+    }
     componentDidMount() {
         this.fetchComptes();
         this.fetchRates();
     }
     submit = (e) => {
         e.preventDefault();
-        this.props.openDialog({show:true,title:"Success",body:"les données ont bien été enregistrées"});
-        this.createVirement(this.props.createVirement.values)
+        const data = this.props.createVirement.values;
+        this.createVirement({...data, date:this.props.date})
     }
     render() {
         const { handleSubmit, pristine, submitting } = this.props;
@@ -141,7 +150,7 @@ class CreateVirement extends Component {
             </Row><br/>
             <Row>
                 <Col>
-                    <Field component={renderField} type="date" name="date" placeholder="Date d'exécution"/>
+                    <Field component={renderDatePicker} name="dateExecution" onChange={this.onSelectDateExecution}/>
                 </Col>
                 <Col>
                     <Field component={renderSelectField} name="devise"
@@ -153,16 +162,15 @@ class CreateVirement extends Component {
                 <Col><Field component={renderField} type="number" name="montant"
                             label="Montant" className="form-control form-control-sm"
                             onChange={this.convertMontant}/></Col>
-                <Col><Field component={renderField} type="number" name="contreValeur" value={this.props.contreValeur}
+                <Col><Field component={renderField} type="number" name="contreValeur" disabled={true} value={this.props.contreValeur}
                             label="Contre Valeur" className="form-control form-control-sm"/></Col>
             </Row><br/>
             <Row>
                 <Col>
-                    <Field component={renderField} name="motif"
-                           label="Motif" className="form-control form-control-sm"/>
+                    <Field component={renderField} name="motif" label="Motif" className="form-control form-control-sm"/>
                 </Col>
                 <Col>
-                    <Field component={renderField} name="refClient"
+                    <Field component={renderField} name="refClient" disabled={true}
                            label="Réference Client" className="form-control form-control-sm"/>
                 </Col>
             </Row><br/>
@@ -199,9 +207,10 @@ class CreateVirement extends Component {
                     <Col><Field component={renderField}  type="text" label="Organisme hospitalier" name="organismeHospitalier"/></Col>
                     <Col><Field component={renderField}  type="text" label="Période de couverture" name="periodeCouverture" /></Col>
                 </Row><br/>*/}
-            <div className="form-group">
-                <Button disabled={pristine||submitting||this.props.createVirement.syncErrors} className="btnEnvoyer" size="sm" type="submit" variant="primary">Envoyer</Button>
-            </div>
+            <Row>
+                <Col></Col><Col></Col>
+                <Col sm={2}><Button disabled={pristine||submitting||this.props.createVirement.syncErrors} className="btnEnvoyer" size="sm" type="submit" variant="primary">Suivant</Button></Col>
+            </Row><br/>
         </form>
         if (this.props.isFetching) return <div>{spinner}</div>
         else return <div>

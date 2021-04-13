@@ -1,9 +1,8 @@
 import {
     GET_COMPTES,
     GET_RATES,
-    OPEN_DIALOG,
     SELECT_COMPTE_DEBITE,
-    SELECT_COMPTE_CREDITE, FETCHING_DATA
+    SELECT_COMPTE_CREDITE, FETCHING_DATA, SELECT_DATE_EXECUTION
 } from "../Constants/constants";
 
 const initialState = {
@@ -14,7 +13,8 @@ const initialState = {
     currentCompteCredite:null,
     currentCompteDebite: null,
     contreValeur: null,
-    isFetching: false
+    isFetching: false,
+    date: null
 };
 
 function VirementReducer(state = initialState, action) {
@@ -44,6 +44,12 @@ function VirementReducer(state = initialState, action) {
                 ...state,
                 comptesDebite: [...state.comptes.filter(c => c !== compteCredite)],
                 currentCompteCredite: compteCredite
+            }
+        case SELECT_DATE_EXECUTION:
+            const date = action.payload;
+            return {
+                ...state,
+                date: date
             }
         case FETCHING_DATA:
             const fetching = action.payload;

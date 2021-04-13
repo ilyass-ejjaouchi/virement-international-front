@@ -8,13 +8,15 @@ import {createStore, combineReducers, applyMiddleware} from 'redux'
 import {Provider} from "react-redux";
 import dialogReducer from './Reducers/DialogReducer';
 import VirementReducer from "./Reducers/VirementReducer";
+import BeneficiareReducer from "./Reducers/BeneficiareReducer";
 import {logger} from "redux-logger/src";
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
-    dialogReducer,form: formReducer,VirementReducer
+    dialogReducer,form: formReducer,VirementReducer, BeneficiareReducer
 })
 const store = createStore(rootReducer, applyMiddleware(logger))
+
 
 ReactDOM.render(
     <Provider store={store}>

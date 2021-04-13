@@ -10,3 +10,21 @@
 .btnEnvoyer:disabled{
     cursor: not-allowed;
 }
+.error{
+    border-color: #e94b4b !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgb(233, 75, 75) !important;
+}
+.errormsg{
+    font-style: italic;
+    color: #e94b4b;
+}
+.input:focus{
+    border-color: #f1aa6e !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgb(241, 170, 110) !important;
+}
+hr{
+    background-color: #f1aa6e;
+}
+.react-datepicker__day--selected,.react-datepicker__day--keyboard-selected{
+    background: #f1aa6e !important;
+}

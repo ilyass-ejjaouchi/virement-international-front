@@ -4,9 +4,10 @@ import React from "react";
 import Header from './Components/Header/Header';
 import CustomNavbar from './Components/Navbar/CustomNavbar';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import CreateBeneficiare from "./Components/CreateBeneficiare/CreateBeneficiare";
 import CreateVirement from "./Components/VirementForm/VirementForm";
 import CustomModel from "./Components/Model/Model";
+import BeneficiareForm from "./Components/CreateBeneficiare/BeneficiareForm";
+import RecapitulatifVirement from "./Components/VirementForm/Recapitulatif/RecapitulatifVirement";
 
 class App extends React.Component {
 
@@ -20,7 +21,7 @@ class App extends React.Component {
                         <Switch>
                             <Route exact path="/" component={CreateVirement}/>
                             <Route path="/virements" component={CreateVirement}/>
-                            <Route path="/beneficiares" component={CreateBeneficiare}/>
+                            <Route path="/beneficiares" component={RecapitulatifVirement}/>
                         </Switch>
                     </Container>
                     <CustomModel></CustomModel>

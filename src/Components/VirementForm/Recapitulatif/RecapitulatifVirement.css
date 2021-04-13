@@ -1,0 +1,19 @@
+.top{
+    margin-top: 10px;
+}
+.btnEdition{
+    color: white !important;
+    border-color: #f1aa6e !important;
+    background-color: #f1aa6e !important ;
+    width: 100px;
+}
+.btnTraiter{
+    border-color: #38c67c !important;
+    background-color: #38c67c !important ;
+    width: 100px;
+}
+.btnRejete{
+    border-color: #fa4157 !important;
+    background-color: #fa4157 !important ;
+    width: 100px;
+}

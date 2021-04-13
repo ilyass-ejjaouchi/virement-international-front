@@ -4,3 +4,9 @@ export const GET_RATES = "GET_DEVISE";
 export const SELECT_COMPTE_DEBITE = "SELECT_COMPTE_DEBITE";
 export const SELECT_COMPTE_CREDITE = "SELECT_COMPTE_CREDITE";
 export const FETCHING_DATA = "FETCHING_DATA";
+export const SELECT_DATE_EXECUTION = "SELECT_DATE_EXECUTION";
+
+ // Beneficiare Actions
+export const GET_BANQUES = "GET_BANQUES";
+export const GET_COUNTRIES = "GET_COUNTRIES";
+

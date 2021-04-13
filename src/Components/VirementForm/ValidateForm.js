@@ -14,8 +14,8 @@ export const validate = values => {
         errors.montant = 'vous devez saisir le montant';
     }else if(values.montant <= 0){
         errors.montant = 'le montant doit être positif';
-    }if (!values.date){
-        errors.date = 'vous devez saisir la date';
+    }if (!values.dateExecution){
+        errors.dateExecution = 'vous devez saisir la date';
     }if (!values.devise){
         errors.devise = 'vous devez saisir la devise';
     }if (!values.justificatif){
@@ -24,6 +24,10 @@ export const validate = values => {
         errors.modeImputation = 'vous devez saisir la mode d\'imputation';
     }/*if (!values.nomComplet){
         errors.nomComplet = 'vous devez saisir le nom complet';
+    }if (!values.CIN){
+        errors.CIN = 'vous devez saisir le CIN';
+    }if (!values.beneficiare){
+        errors.beneficiare = 'vous devez saisir le beneficiare';
     }if (!values.nomMedecin){
         errors.nomMedecin = 'vous devez saisir le nom du medcin';
     }if (!values.numinstruction){
@@ -32,10 +36,6 @@ export const validate = values => {
         errors.organismeHospitalier = 'vous devez saisir l\'organisme hospitalier';
     }if (!values.periodeCouverture){
         errors.periodeCouverture = 'vous devez saisir la periode de couverture';
-    }if (!values.beneficiare){
-        errors.beneficiare = 'vous devez saisir le beneficiare';
-    }if (!values.CIN){
-        errors.CIN = 'vous devez saisir le CIN';
     }*/
     return errors
 }
