@@ -5,9 +5,11 @@ import Header from './Components/Header/Header';
 import CustomNavbar from './Components/Navbar/CustomNavbar';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import CreateVirement from "./Components/VirementForm/VirementForm";
-import CustomModel from "./Components/Model/Model";
+import CustomDialog from "./Components/Model/Dialog";
 import BeneficiareForm from "./Components/CreateBeneficiare/BeneficiareForm";
 import RecapitulatifVirement from "./Components/VirementForm/Recapitulatif/RecapitulatifVirement";
+import SignatureVirement from "./Components/VirementForm/Signature/SignatureVirement";
+import ChercherVirement from "./Components/ChercherVirement/ChercherVirement";
 
 class App extends React.Component {
 
@@ -20,11 +22,15 @@ class App extends React.Component {
                         <Header></Header>
                         <Switch>
                             <Route exact path="/" component={CreateVirement}/>
+                            <Route path="/virements/recaputilatif" component={RecapitulatifVirement}/>
+                            <Route path="/virements/signature" component={SignatureVirement}/>
+                            <Route path="/virements/chercherVirement" component={ChercherVirement}/>
                             <Route path="/virements" component={CreateVirement}/>
-                            <Route path="/beneficiares" component={RecapitulatifVirement}/>
+                            <Route path="/beneficiares" component={BeneficiareForm}/>
+                            <Route path="/chercherVirement" component={ChercherVirement}/>
                         </Switch>
                     </Container>
-                    <CustomModel></CustomModel>
+                    <CustomDialog></CustomDialog>
                 </div>
             </Router>
         )

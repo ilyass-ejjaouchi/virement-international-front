@@ -2,7 +2,11 @@ import {
     GET_COMPTES,
     GET_RATES,
     SELECT_COMPTE_DEBITE,
-    SELECT_COMPTE_CREDITE, FETCHING_DATA, SELECT_DATE_EXECUTION
+    SELECT_COMPTE_CREDITE,
+    FETCHING_DATA,
+    SELECT_DATE_EXECUTION,
+    SET_INITIAL_FORM_VALUES,
+    SET_CURRENT_VIREMENT, SET_VIREMENTS
 } from "../Constants/constants";
 
 const initialState = {
@@ -14,7 +18,10 @@ const initialState = {
     currentCompteDebite: null,
     contreValeur: null,
     isFetching: false,
-    date: null
+    date: null,
+    formValues: null,
+    idcurrentVirement: null,
+    virements: null
 };
 
 function VirementReducer(state = initialState, action) {
@@ -56,6 +63,21 @@ function VirementReducer(state = initialState, action) {
             return {
                 ...state,
                 isFetching: fetching
+            }
+        case SET_INITIAL_FORM_VALUES:
+            return {
+                ...state,
+                formValues: action.payload
+            }
+        case SET_CURRENT_VIREMENT:
+            return {
+                ...state,
+                idcurrentVirement: action.payload
+            }
+        case SET_VIREMENTS:
+            return {
+                ...state,
+                virements: action.payload
             }
         default:
             return state;

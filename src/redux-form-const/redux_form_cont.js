@@ -27,8 +27,9 @@ export const renderCheckboxField = ({ input,label, meta: { touched, error} }) =>
 )
 export const renderDatePicker = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
     <div>
-        <DatePicker className="form-control form-control-sm input" placeholderText="Date d'execution" {...input}
-                    selected={input.value ?input.value : null} minDate={moment().toDate()} maxDate={addDays(new Date(), 5)}/>
-        {touched && error && <span>{error}</span>}
+        <DatePicker className={touched && error?"form-control form-control-sm error":"form-control form-control-sm input"}
+                    placeholderText={placeholder} {...input} selected={input.value ?input.value : null}
+                    minDate={moment().toDate()} maxDate={addDays(new Date(), 5)}/>
+        {touched && ((error && <span className="errormsg">{error}</span>))}
     </div>
 );

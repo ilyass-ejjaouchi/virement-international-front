@@ -1,29 +1,29 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import './RecapitulatifVirement.css';
-import pdfIcon from '../../../media/pdf.png';
 import deleteIcon from '../../../media/delete.png';
 import validerIcon from '../../../media/valider.png';
 
 import {openDialog} from "../../../Actions/DialogActions";
 import {Button, Col, Container, Row} from "react-bootstrap";
+import {getFormValues} from "redux-form";
 import {setActiveStep} from "../../../Actions/StepperActions";
 
-class RecapitulatifVirement extends Component {
+class SignatureVirement extends Component {
     formValue = this.props.formStates;
-    componentDidMount() {
-        console.log(this.formValue)
-    }
-
-    onEditVirement = () => {
-        this.handlePrevious();
+    onConfirmeVirement = () => {
+        this.handleNext();
     };
-    onTraiteVirement = () => {
+    onRejetVirement = () => {
+        this.props.openDialog({body: "êtes-vous sûr de vouloir rejeter ce virement", show: true, title: "warning!!", style:"danger"})
         this.handlePrevious();
     };
     handlePrevious = () => {
         this.props.setActiveStep(this.props.activeStep - 1);
         this.props.history.push('/virements');
+    };
+    handleNext = () => {
+        this.props.setActiveStep(this.props.activeStep + 1);
+        this.props.history.push('/virements/recaputilatif');
     };
     render() {
         return <Container className="recap">
@@ -64,9 +64,8 @@ class RecapitulatifVirement extends Component {
             <Row className="top">
                 <Col></Col> <Col></Col>
                 <Col>
-                    <Button className="btnEdition" onClick={this.onEditVirement} variant="warning" size="sm"><img src={pdfIcon} alt="print"/>{' '}Edition</Button>{'  '}
-                    <Button className="btnTraiter" onClick={this.onTraiteVirement} variant="success" size="sm"><img src={validerIcon} alt="print"/>Traité</Button>{'  '}
-                    <Button className="btnRejete" variant="danger" size="sm"><img src={deleteIcon} alt="print"/>Rejeté</Button>
+                    <Button className="btnRejete" onClick={this.onRejetVirement} variant="danger" size="sm"><img src={deleteIcon} alt="print"/>{' '}Rejeté</Button>{'  '}
+                    <Button className="btnTraiter" onClick={this.onConfirmeVirement} variant="success" size="sm"><img src={validerIcon} alt="print"/>{' '}Confirmer</Button>
                 </Col>
             </Row>
         </Container>;
@@ -85,8 +84,9 @@ const mapStateToProps = state => {
         date: state.VirementReducer.date,
         currentCompteCredite: state.VirementReducer.currentCompteCredite,
         currentCompteDebite: state.VirementReducer.currentCompteDebite,
-        formStates: state.VirementReducer.formValues,
+        formStates: getFormValues('createVirement')(state),
+        activeStep: state.StepperReducer.activeStep
     };
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(RecapitulatifVirement);
+export default connect(mapStateToProps,mapDispatchToProps)(SignatureVirement);

@@ -1,7 +1,7 @@
 import {Nav, Navbar} from "react-bootstrap";
 import logo from "../../media/logoAdria.png";
 import React, {Component} from "react";
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
 import './CustomNavbar.css';
 
 class CustomNavbar extends Component {

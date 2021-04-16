@@ -1,18 +1,15 @@
 import React, {Component} from 'react';
-import {change, Field, reduxForm, reset} from 'redux-form';
+import {Field, reduxForm} from 'redux-form';
 import {Button, Col, Form, Row} from "react-bootstrap";
-import DatePicker from "react-datepicker";
-import { addDays } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import {connect} from "react-redux";
 import {validate} from './validateBeneficiare';
-import {renderSelectField,renderField} from "../../redux-form-const";
+import {renderSelectField,renderField} from "../../redux-form-const/redux_form_cont";
 import {fetchingData, getRates} from "../../Actions/VirementActions";
 import {openDialog} from "../../Actions/DialogActions";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {getBanques, getCountries} from "../../Actions/BeneficiareActions";
-import moment from "moment";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -65,13 +62,6 @@ class BeneficiareForm extends Component {
             })
             .catch(error => {});
     }
-    fetchRates(){
-        axios.get('http://localhost:8081/comptes/currencies')
-            .then( response => {
-                this.props.getRates(response.data);
-            })
-            .catch(error => {});
-    }
     onSelectBanque = (e)=>{
         const bic = e.target.value
         this.props.change('BIC', bic);
@@ -94,7 +84,7 @@ class BeneficiareForm extends Component {
             });
     }
     render() {
-        const { handleSubmit, pristine, submitting } = this.props;
+        const {pristine, submitting } = this.props;
         const spinner = <LoadingSpinner></LoadingSpinner>;
         const form =  <Form onSubmit={this.submit}>
             <br/>

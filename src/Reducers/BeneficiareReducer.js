@@ -7,7 +7,7 @@ const initialState = {
     rates:[]
 };
 
-function VirementReducer(state = initialState, action) {
+function BeneficiareReducer(state = initialState, action) {
     switch (action.type) {
         case GET_BANQUES:
             return {
@@ -34,4 +34,4 @@ function VirementReducer(state = initialState, action) {
             return state;
     }
 }
-export default VirementReducer;
+export default BeneficiareReducer;
