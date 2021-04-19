@@ -11,19 +11,23 @@ import {
     getRates,
     selectCompteCredite,
     selectCompteDebite, selectDateExecution, setCurrentVirement, setInitialFormValues
-} from "../../Actions/VirementActions";
-import {openDialog} from "../../Actions/DialogActions";
+} from "../../Redux/Actions/VirementActions";
+import {openDialog} from "../../Redux/Actions/DialogActions";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {
     renderSelectField,
     renderCheckboxField,
     renderField,
     renderDatePicker
-} from "../../redux-form-const/redux_form_cont";
+} from "../../Redux/redux-form-const/redux_form_cont";
 import moment from "moment";
-import {setActiveStep} from "../../Actions/StepperActions";
-import {ENREGISTRÉ} from "../../Constants/EtatVirement";
-import {DATA_NOT_FOUND, REJET_VIREMENT} from "../../Constants/constants";
+import {setActiveStep} from "../../Redux/Actions/StepperActions";
+import {ENREGISTRÉ} from "../../Redux/Constants/EtatVirement";
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import CustomStepper from "../Stepper/CustomStepper";
+import {addDays} from "date-fns";
+import DatePicker from "react-datepicker";
 
 function mapDispatchToProps(dispatch) {
     return {getComptes: comptes => dispatch(getComptes(comptes)),
@@ -54,9 +58,6 @@ const mapStateToProps = state => {
 };
 
 class CreateVirement extends Component {
-    onHandleTest = ()=>{
-        this.props.openDialog({body: "data not found", show: true, title: "Erreur!!", style:"danger",type:REJET_VIREMENT})
-    }
 
     fetchComptes(){
         let that = this;
@@ -82,7 +83,7 @@ class CreateVirement extends Component {
                 this.props.change('contreValeur', response.data.rates.deviseCredite);
             })
             .catch(error => {});*/
-        this.props.change('contreValeur', value*10.2);
+        this.props.change('contreValeur', value*2);
     }
 
     createVirement(data){
@@ -117,6 +118,7 @@ class CreateVirement extends Component {
     onSelectDeviseChange = (e)=>{
         console.log(e.target.value)
     }
+
     onSelectDateExecution  = (e)=> {
         this.props.selectDateExecution(moment(e).format('YYYY-MM-DD'));
     }
@@ -124,6 +126,7 @@ class CreateVirement extends Component {
         this.props.setActiveStep(0);
         this.fetchComptes();
         this.fetchRates();
+        this.props.setInitialFormValues({});
 
     }
     submit = (e) => {
@@ -140,12 +143,13 @@ class CreateVirement extends Component {
     };
 
     render() {
-        const {submitting, invalid  } = this.props;
+        const {submitting, invalid, reset} = this.props;
         const spinner = <LoadingSpinner></LoadingSpinner>;
         const form = <form onSubmit={ this.submit }>
             <br/><Row>
                 <Col><h4>Créer un Virement</h4><hr/></Col>
-                <Col sm="2"><Button className="btnEnvoyer" size="sm" as={Link} to="/virements/chercherVirement" >Liste des virements</Button></Col>
+                <Col><Button className="btnRechercher float-right" size="sm" as={Link} to="/virements/chercherVirement" >
+                    <FormatListBulletedIcon style={{ fontSize: 20 }}/>{' '}LISTE DES VIREMENTS</Button></Col>
             </Row>
             <Row>
                 <Col>
@@ -177,7 +181,7 @@ class CreateVirement extends Component {
             </Row><br/>
             <Row>
                 <Col>
-                    <Field component={renderDatePicker} name="dateExecution" placeholder="Date d'execution" onChange={this.onSelectDateExecution}/>
+                    <Field component={renderDatePicker} minDate={moment().toDate()} maxDate={addDays(new Date(), 30)} name="dateExecution" placeholder="Date d'execution" onChange={this.onSelectDateExecution}/>
                 </Col>
                 <Col>
                     <Field component={renderSelectField} name="devise"
@@ -233,14 +237,14 @@ class CreateVirement extends Component {
                     <Col><Field component={renderField}  type="text" label="Période de couverture" name="periodeCouverture" /></Col>
                 </Row><br/>*/}
             <Row>
-                <Col></Col><Col></Col>
-                <Col sm={2}><Button disabled={submitting || invalid} className="btnEnvoyer" size="sm" type="submit" variant="primary">Suivant</Button></Col>
-                <Col sm={2}><Button size="sm" variant="primary" onClick={this.onHandleTest}>test</Button></Col>
+                <Col><Button disabled={submitting || invalid} className="btnEnvoyer float-right" size="sm" type="submit"
+                                    variant="primary">SUIVANT{' '}<NavigateNextIcon style={{ fontSize: 20 }}/></Button></Col>
             </Row><br/>
         </form>
         if (this.props.isFetching) return <div>{spinner}</div>
         else return <div>
-                        {form}
+                     <CustomStepper></CustomStepper>
+                     {form}
                     </div>
     }}
 

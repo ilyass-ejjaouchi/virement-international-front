@@ -1,5 +1,5 @@
 import React from "react";
-import '../App.css'
+import '../../App.css'
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import {addDays} from "date-fns";
@@ -25,11 +25,11 @@ export const renderCheckboxField = ({ input,label, meta: { touched, error} }) =>
         {touched && ((error && <span className="errormsg">{error}</span>))}
     </div>
 )
-export const renderDatePicker = ({input, placeholder, defaultValue, meta: {touched, error} }) => (
+export const renderDatePicker = ({input, placeholder, minDate,maxDate, meta: {touched, error} }) => (
     <div>
-        <DatePicker className={touched && error?"form-control form-control-sm error":"form-control form-control-sm input"}
-                    placeholderText={placeholder} {...input} selected={input.value ?input.value : null}
-                    minDate={moment().toDate()} maxDate={addDays(new Date(), 5)}/>
+        <DatePicker autoComplete="off" className={touched && error?"form-control form-control-sm error":"form-control form-control-sm input"}
+                    placeholderText={placeholder} {...input} selected={input.value ?input.value : null} dateFormat="dd/MM/yyyy"
+                    minDate={minDate} maxDate={maxDate}/>
         {touched && ((error && <span className="errormsg">{error}</span>))}
     </div>
 );

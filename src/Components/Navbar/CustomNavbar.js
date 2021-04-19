@@ -9,9 +9,8 @@ class CustomNavbar extends Component {
         return <Navbar bg="light" variant="light">
             <Navbar.Brand as={Link} to="/"><img src={logo} alt="logo" className="logo"/></Navbar.Brand>
             <Nav className="mr-auto">
-                <Nav.Link  as={Link} to="/" className="lien" >Acceuil</Nav.Link>
-                <Nav.Link  as={Link} to="/virements" className="lien">Virements</Nav.Link>
-                <Nav.Link  as={Link} to="/beneficiares" className="lien">Bénéficiaire</Nav.Link>
+                <Nav.Link  as={Link} to="/virements" className="lien">Demande de Virement</Nav.Link>
+                <Nav.Link  as={Link} to="/beneficiares" className="lien">Déclaration des bénéficiaires</Nav.Link>
             </Nav>
         </Navbar>;
     }

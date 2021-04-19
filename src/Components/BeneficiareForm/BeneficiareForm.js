@@ -5,11 +5,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import {connect} from "react-redux";
 import {validate} from './validateBeneficiare';
-import {renderSelectField,renderField} from "../../redux-form-const/redux_form_cont";
-import {fetchingData, getRates} from "../../Actions/VirementActions";
-import {openDialog} from "../../Actions/DialogActions";
+import {renderSelectField,renderField} from "../../Redux/redux-form-const/redux_form_cont";
+import {fetchingData, getRates} from "../../Redux/Actions/VirementActions";
+import {openDialog} from "../../Redux/Actions/DialogActions";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import {getBanques, getCountries} from "../../Actions/BeneficiareActions";
+import {getBanques, getCountries} from "../../Redux/Actions/BeneficiareActions";
+import {Link} from "react-router-dom";
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
+import CustomStepper from "../Stepper/CustomStepper";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -87,14 +91,10 @@ class BeneficiareForm extends Component {
         const {pristine, submitting } = this.props;
         const spinner = <LoadingSpinner></LoadingSpinner>;
         const form =  <Form onSubmit={this.submit}>
-            <br/>
-            <Row>
-                <Col xs={9}><h4>Bénéficiaire</h4> </Col>
-                <Col xs={3}>
-                    <Button size="sm" variant="secondary" className="btnEnvoyer">liste des bénéficiaires</Button>
-                </Col>
+            <br/><Row>
+            <Col><h4>Créer un Bénéficiaire</h4><hr/></Col>
+            <Col><Button className="float-right btnEnvoyer" size="sm" as={Link} to="/beneficiares/chercherBeneficiare" ><FormatListBulletedIcon style={{ fontSize: 20 }}/>{' '}LISTE DES BÉNÉFICIAIRES</Button></Col>
             </Row>
-            <hr/>
             <Form.Group>
                 <Row>
                     <Col>
@@ -157,11 +157,13 @@ class BeneficiareForm extends Component {
                 <Col></Col>
             </Row> <br/>
             <div className="form-group">
-                 <Button disabled={pristine||submitting||this.props.createBeneficiare.syncErrors} className="btnEnvoyer" size="sm" type="submit" variant="primary">Envoyer</Button>
+                 <Button disabled={pristine||submitting||this.props.createBeneficiare.syncErrors} className="btnEnvoyer float-right"
+                         size="sm" type="submit" variant="primary">SUIVANT{' '}<NavigateNextIcon style={{ fontSize: 20 }}/></Button>
             </div>
         </Form>
         if (this.props.isFetching) return <div>{spinner}</div>
         else return <div>
+            <CustomStepper></CustomStepper>
             {form} <br/>
         </div>
     }}

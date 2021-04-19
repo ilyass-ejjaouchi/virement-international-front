@@ -2,3 +2,22 @@
     color: #948b8a !important;
     font-size: 0.8em;
 }
+.alertMsg{
+    text-align: center !important;
+    margin-top: 20px;
+}
+.eye{
+    fontSize: 10 !important;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.eye:hover{
+    color: #f95e02;
+}
+.delete{
+    fontSize: 10 !important;
+    cursor: pointer;
+}
+.delete:hover{
+    color: #e94b4b;
+}

@@ -5,15 +5,14 @@
     color: white !important;
     border-color: #f1aa6e !important;
     background-color: #f1aa6e !important ;
-    width: 100px;
+    margin-right: 8px;
 }
 .btnTraiter{
     border-color: #38c67c !important;
     background-color: #38c67c !important ;
-    width: 100px;
+    margin-right: 8px;
 }
 .btnRejete{
     border-color: #fa4157 !important;
     background-color: #fa4157 !important ;
-    width: 100px;
 }

@@ -6,7 +6,7 @@ import {
     FETCHING_DATA,
     SELECT_DATE_EXECUTION,
     SET_INITIAL_FORM_VALUES,
-    SET_CURRENT_VIREMENT, SET_VIREMENTS
+    SET_CURRENT_VIREMENT, SET_VIREMENTS, DELETE_VIREMENT, CONFIRMER_VIREMENT
 } from "../Constants/constants";
 
 const initialState = {
@@ -75,6 +75,16 @@ function VirementReducer(state = initialState, action) {
                 idcurrentVirement: action.payload
             }
         case SET_VIREMENTS:
+            return {
+                ...state,
+                virements: action.payload
+            };
+        case DELETE_VIREMENT:
+            return {
+                ...state,
+                virements: action.payload
+            }
+        case CONFIRMER_VIREMENT:
             return {
                 ...state,
                 virements: action.payload

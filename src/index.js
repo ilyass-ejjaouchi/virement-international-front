@@ -6,10 +6,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import reportWebVitals from './reportWebVitals';
 import {createStore, combineReducers, applyMiddleware} from 'redux'
 import {Provider} from "react-redux";
-import dialogReducer from './Reducers/DialogReducer';
-import VirementReducer from "./Reducers/VirementReducer";
-import BeneficiareReducer from "./Reducers/BeneficiareReducer";
-import StepperReducer from "./Reducers/StepperReducer";
+import dialogReducer from './Redux/Reducers/DialogReducer';
+import VirementReducer from "./Redux/Reducers/VirementReducer";
+import BeneficiareReducer from "./Redux/Reducers/BeneficiareReducer";
+import StepperReducer from "./Redux/Reducers/StepperReducer";
 import {logger} from "redux-logger/src";
 import { reducer as formReducer } from 'redux-form';
 

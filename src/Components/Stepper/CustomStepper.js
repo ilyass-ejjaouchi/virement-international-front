@@ -9,7 +9,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 import StepConnector from '@material-ui/core/StepConnector';
 import {connect} from "react-redux";
-import {setActiveStep} from "../../Actions/StepperActions";
+import {setActiveStep} from "../../Redux/Actions/StepperActions";
 import back from '../../media/virment.png';
 import './CustomStepper.css';
 

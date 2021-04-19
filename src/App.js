@@ -1,12 +1,11 @@
 import './App.css';
 import {Container} from 'react-bootstrap';
 import React from "react";
-import Header from './Components/Header/Header';
 import CustomNavbar from './Components/Navbar/CustomNavbar';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import CreateVirement from "./Components/VirementForm/VirementForm";
-import CustomDialog from "./Components/Model/Dialog";
-import BeneficiareForm from "./Components/CreateBeneficiare/BeneficiareForm";
+import CustomDialog from "./Components/Dialog/Dialog";
+import BeneficiareForm from "./Components/BeneficiareForm/BeneficiareForm";
 import RecapitulatifVirement from "./Components/VirementForm/Recapitulatif/RecapitulatifVirement";
 import SignatureVirement from "./Components/VirementForm/Signature/SignatureVirement";
 import ChercherVirement from "./Components/ChercherVirement/ChercherVirement";
@@ -19,7 +18,6 @@ class App extends React.Component {
                 <div>
                     <CustomNavbar></CustomNavbar>
                     <Container className="App">
-                        <Header></Header>
                         <Switch>
                             <Route exact path="/" component={CreateVirement}/>
                             <Route path="/virements/recaputilatif" component={RecapitulatifVirement}/>

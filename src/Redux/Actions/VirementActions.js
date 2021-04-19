@@ -33,3 +33,9 @@ export function setCurrentVirement(payload) {
 export function setViremets(payload) {
     return { type: SET_VIREMENTS, payload };
 }
+export function deleteVirement(payload) {
+    return { type: SET_VIREMENTS, payload };
+}
+export function confirmerVirement(payload) {
+    return { type: SET_VIREMENTS, payload };
+}

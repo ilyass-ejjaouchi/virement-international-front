@@ -1,40 +1,46 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Table} from "react-bootstrap";
+import {Alert, Button, Nav, Table} from "react-bootstrap";
 import './VirementTable.css';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CloseIcon from '@material-ui/icons/Close';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import {setViremets} from "../../../Actions/VirementActions";
+import {setCurrentVirement, setViremets} from "../../../Redux/Actions/VirementActions";
 import axios from "axios";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
-import {openDialog} from "../../../Actions/DialogActions";
+import {openDialog} from "../../../Redux/Actions/DialogActions";
+import {DELETE_VIREMENT} from "../../../Redux/Constants/constants";
+import {ABANDONNÉ, ANNULÉ, NON_VALIDÉ} from "../../../Redux/Constants/EtatVirement";
+import {Link} from "react-router-dom";
 
 function mapDispatchToProps(dispatch) {
     return {
-        setViremets: rates => dispatch(setViremets(rates)),
-        openDialog: rates => dispatch(openDialog(rates))
+        openDialog: cd => dispatch(openDialog(cd)),
+        setCurrentVirement: id => dispatch(setCurrentVirement(id)),
     }};
 const mapStateToProps = state => {
     return {
-        virements: state.VirementReducer.virements
+        virements: state.VirementReducer.virements,
+        isFetching: state.VirementReducer.isFetching
     };
 };
 
 class ChercherVirement extends Component {
-    getVirements = ( ) => {
-        axios.get('http://localhost:8081/virements')
-            .then( response => {
-                this.props.setViremets(response.data)
-            })
-            .catch(error => {this.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger"})});
-    }
+
     componentDidMount() {
-        this.getVirements();
+    }
+
+    onDeleteVirement= (id)=>{
+        this.props.setCurrentVirement(id);
+        this.props.openDialog({body: "ÊTES-VOUS SÛR DE VOULOIR SUPPRIMER CE VIREMENT", show: true,
+            title: "Erreur!!", style:"danger", type: DELETE_VIREMENT});
     }
     render() {
-        if (!this.props.virements) return <LoadingSpinner></LoadingSpinner>
-        return <div>
+        if (this.props.isFetching) return <LoadingSpinner/>
+        if (!this.props.virements ) return <p></p>
+        if (this.props.virements.length === 0)
+            return <Alert variant="warning" className="alertMsg"><b>DÉSOLÉ AUCUNE DONNÉE À AFFICHER</b></Alert>
+        const table = <div>
             <br/>
             <Table striped bordered responsive hover size="sm" className="table">
                 <thead>
@@ -42,32 +48,31 @@ class ChercherVirement extends Component {
                     <th>RÉFÉRENCE</th>
                     <th>DATE D'EXÉCUTION</th>
                     <th>COMPTE À DÉBITER</th>
-                    <th>ABONNÉ</th>
+                    <th>COMPTE À CRÉDITER</th>
                     <th>MONTANT</th>
                     <th>CONTRE VALEUR</th>
                     <th>MOTIF</th>
                     <th>ÉTAT</th>
-                    <th>STATUT</th>
                     <th>ACTIONS</th>
                 </tr>
                 </thead>
                 <tbody>
-                {this.props.virements.map((virement,index) =>
+                {   this.props.virements.map((virement,index) =>
                     <tr key={index}>
                         <td>{virement.id}</td>
                         <td>{virement.dateExecution}</td>
-                        <td>compte xxx</td>
-                        <td>compte xxx</td>
+                        <td>{virement.compteCredite.numeroCompte}</td>
+                        <td>{virement.compteDebite.numeroCompte}</td>
                         <td>{virement.montant}</td>
-                        <td>{virement.contreValeur}</td>
+                        <td>{virement.contreValeur+' '+virement.devise}</td>
                         <td>motif xxx</td>
-                        <td>{virement.etat}</td>
-                        <td><FiberManualRecordIcon style={{ fontSize: 20, color: '#DD4040' }}/>{' '}<FiberManualRecordIcon style={{ fontSize: 20, color: '#1fc64d' }}/></td>
-                        <td><VisibilityIcon style={{ fontSize: 20, cursor:'pointer' }}/>{' '}<CloseIcon style={{ fontSize: 20, cursor:'pointer' }}/></td>
+                        <td>{virement.etat+' '}<FiberManualRecordIcon className={(virement.etat === ANNULÉ ||virement.etat === ABANDONNÉ ||virement.etat ===NON_VALIDÉ)? "red":"green"}/></td>
+                        <td><VisibilityIcon className="eye"/><CloseIcon onClick={this.onDeleteVirement.bind(this, virement.id)} className="delete"/></td>
                     </tr>)}
                 </tbody>
             </Table>
         </div>
+        return <div>{table}</div>
     }}
 
 ChercherVirement = connect(
