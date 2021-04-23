@@ -1,32 +1,39 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import './RecapitulatifVirement.css';
-import pdfIcon from '../../../media/pdf.png';
+import pdfIcon from '../../../../media/pdf.png';
 
-import {openDialog} from "../../../Redux/Actions/DialogActions";
+import {openDialog} from "../../../../Redux/Actions/DialogActions";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import {setActiveStep} from "../../../Redux/Actions/StepperActions";
-import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
+import {setActiveStep} from "../../../../Redux/Actions/StepperActions";
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
-import CustomStepper from "../../Stepper/CustomStepper";
+import CustomStepper from "../../../Stepper/CustomStepper";
+import {Redirect} from "react-router-dom";
+import {setInitialFormValues} from "../../../../Redux/Actions/VirementActions";
 
 class RecapitulatifVirement extends Component {
     formValue = this.props.formStates;
     componentDidMount() {
-        console.log(this.formValue)
     }
 
-    onEditVirement = () => {
-        this.handlePrevious();
+    onPrintVirement = () => {
+        console.log("print virement")
     };
-    onTraiteVirement = () => {
-        this.handlePrevious();
+
+    onQuitt = () => {
+        this.props.setActiveStep(0);
+        this.props.resetForm({})
+        this.props.history.push('/virements');
     };
+
     handlePrevious = () => {
         this.props.setActiveStep(this.props.activeStep - 1);
         this.props.history.push('/virements');
     };
     render() {
+        if (!this.props.currentCompteDebite) return <div>
+            <Redirect to="/virements" />
+        </div>;
         return <div>
             <CustomStepper></CustomStepper>
             <Container className="recap">
@@ -65,19 +72,18 @@ class RecapitulatifVirement extends Component {
                     <Col sm={2}>{this.formValue.justificatif}</Col>
                 </Row>
                 <Row className="top">
-                        <Button className="btnEdition float-right" onClick={this.onEditVirement} variant="warning" size="sm"><img src={pdfIcon} alt="print"/>{' '}Edition</Button>
-                        <Button className="btnTraiter float-right" onClick={this.onTraiteVirement} variant="success" size="sm"><CheckCircleRoundedIcon style={{fontSize: 20}}/>Traité</Button>
-                        <Button className="btnRejete float-right" variant="danger" size="sm"><DeleteRoundedIcon style={{fontSize: 20}}/>Rejeté</Button>
+                        <Button className="btnEdition float-right" onClick={this.onPrintVirement} variant="warning" size="sm"><img src={pdfIcon} alt="print"/>{' '}Imprimer</Button>
+                        <Button className="btnRejete float-right" onClick={this.onQuitt} variant="danger" size="sm"><DeleteRoundedIcon style={{fontSize: 20}}/>Quitter</Button>
                 </Row>
             </Container>
         </div>
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return {
         openDialog: o => dispatch(openDialog(o)),
         setActiveStep: step => dispatch(setActiveStep(step)),
+        resetForm: step => dispatch(setInitialFormValues(step)),
     }};
 const mapStateToProps = state => {
     return {

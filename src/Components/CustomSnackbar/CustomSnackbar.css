@@ -1,0 +1,9 @@
+.successAlert{
+    background-color: #14a555 !important;
+}
+.dangerAlert{
+    background-color: #f13449 !important;
+}
+.warningAlert{
+    background-color: #f89037 !important;
+}

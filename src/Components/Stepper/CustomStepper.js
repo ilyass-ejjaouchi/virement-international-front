@@ -94,10 +94,6 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
-    stepper :{
-        backgroundImage: `url(${back})`,
-        color:'red'
-    }
 }));
 function CustomStepper(props) {
     const classes = useStyles();
@@ -106,7 +102,7 @@ function CustomStepper(props) {
 
     return (
         <div className={classes.root}>
-            <Stepper className={classes.stepper} alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+            <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
                 {steps.map((label) => (
                     <Step key={label} >
                         <StepLabel className="step" StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>

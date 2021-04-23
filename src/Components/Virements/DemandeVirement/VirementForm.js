@@ -11,23 +11,23 @@ import {
     getRates,
     selectCompteCredite,
     selectCompteDebite, selectDateExecution, setCurrentVirement, setInitialFormValues
-} from "../../Redux/Actions/VirementActions";
-import {openDialog} from "../../Redux/Actions/DialogActions";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+} from "../../../Redux/Actions/VirementActions";
+import {openDialog} from "../../../Redux/Actions/DialogActions";
+import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 import {
     renderSelectField,
     renderCheckboxField,
     renderField,
     renderDatePicker
-} from "../../Redux/redux-form-const/redux_form_cont";
+} from "../../../Redux/redux-form-const/redux_form_cont";
 import moment from "moment";
-import {setActiveStep} from "../../Redux/Actions/StepperActions";
-import {ENREGISTRÉ} from "../../Redux/Constants/EtatVirement";
+import {setActiveStep} from "../../../Redux/Actions/StepperActions";
+import {ENREGISTRÉ} from "../../../Redux/Constants/EtatVirement";
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import CustomStepper from "../Stepper/CustomStepper";
+import CustomStepper from "../../Stepper/CustomStepper";
 import {addDays} from "date-fns";
-import DatePicker from "react-datepicker";
+import {DANGER} from "../../../Redux/Constants/constants";
 
 function mapDispatchToProps(dispatch) {
     return {getComptes: comptes => dispatch(getComptes(comptes)),
@@ -65,7 +65,7 @@ class CreateVirement extends Component {
             .then( response => {
                 this.props.getComptes(response.data)
             })
-            .catch(error => {that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger"})});
+            .catch(error => {that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})});
     }
     fetchRates(){
         let that = this;
@@ -73,7 +73,7 @@ class CreateVirement extends Component {
             .then( response => {
                 this.props.getRates(response.data);
             })
-            .catch(error => {that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger"})});
+            .catch(error => {that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})});
     }
 
     convertMontant = (e)=>{
@@ -98,7 +98,7 @@ class CreateVirement extends Component {
                 that.props.openDialog({body: "les données ont bien été enregistrées", show: true, title: "Succès", style:"success"})*/
             })
             .catch(function (error) {
-                that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger"})
+                that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})
             });
     }
 
@@ -112,7 +112,6 @@ class CreateVirement extends Component {
         const currentCompteDebite = this.props.comptes.find(c => c.numeroCompte === parseInt(id))
         this.props.selectCompteDebite(currentCompteDebite);
         if (currentCompteDebite) this.props.change('refClient', currentCompteDebite.client.referenceClient);
-
     }
 
     onSelectDeviseChange = (e)=>{
@@ -127,8 +126,8 @@ class CreateVirement extends Component {
         this.fetchComptes();
         this.fetchRates();
         this.props.setInitialFormValues({});
-
     }
+
     submit = (e) => {
         e.preventDefault();
         const data = this.props.createVirement.values;
@@ -147,7 +146,7 @@ class CreateVirement extends Component {
         const spinner = <LoadingSpinner></LoadingSpinner>;
         const form = <form onSubmit={ this.submit }>
             <br/><Row>
-                <Col><h4>Créer un Virement</h4><hr/></Col>
+                <Col><h4>Demander un Virement</h4><hr/></Col>
                 <Col><Button className="btnRechercher float-right" size="sm" as={Link} to="/virements/chercherVirement" >
                     <FormatListBulletedIcon style={{ fontSize: 20 }}/>{' '}LISTE DES VIREMENTS</Button></Col>
             </Row>
@@ -258,5 +257,4 @@ CreateVirement = connect(
     mapDispatchToProps
 )(CreateVirement);
 
-
-export default CreateVirement
+export default CreateVirement;

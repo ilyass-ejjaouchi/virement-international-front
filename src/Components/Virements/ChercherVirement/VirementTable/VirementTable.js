@@ -5,13 +5,11 @@ import './VirementTable.css';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CloseIcon from '@material-ui/icons/Close';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import {setCurrentVirement, setViremets} from "../../../Redux/Actions/VirementActions";
-import axios from "axios";
-import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
-import {openDialog} from "../../../Redux/Actions/DialogActions";
-import {DELETE_VIREMENT} from "../../../Redux/Constants/constants";
-import {ABANDONNÉ, ANNULÉ, NON_VALIDÉ} from "../../../Redux/Constants/EtatVirement";
-import {Link} from "react-router-dom";
+import {setCurrentVirement} from "../../../../Redux/Actions/VirementActions";
+import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
+import {openDialog} from "../../../../Redux/Actions/DialogActions";
+import {DANGER, DELETE_VIREMENT} from "../../../../Redux/Constants/constants";
+import {ABANDONNÉ, ANNULÉ, NON_VALIDÉ} from "../../../../Redux/Constants/EtatVirement";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -33,7 +31,7 @@ class ChercherVirement extends Component {
     onDeleteVirement= (id)=>{
         this.props.setCurrentVirement(id);
         this.props.openDialog({body: "ÊTES-VOUS SÛR DE VOULOIR SUPPRIMER CE VIREMENT", show: true,
-            title: "Erreur!!", style:"danger", type: DELETE_VIREMENT});
+            title: "ATTENTION !", style:DANGER, type: DELETE_VIREMENT});
     }
     render() {
         if (this.props.isFetching) return <LoadingSpinner/>
@@ -65,7 +63,7 @@ class ChercherVirement extends Component {
                         <td>{virement.compteDebite.numeroCompte}</td>
                         <td>{virement.montant}</td>
                         <td>{virement.contreValeur+' '+virement.devise}</td>
-                        <td>motif xxx</td>
+                        <td>{virement.motif}</td>
                         <td>{virement.etat+' '}<FiberManualRecordIcon className={(virement.etat === ANNULÉ ||virement.etat === ABANDONNÉ ||virement.etat ===NON_VALIDÉ)? "red":"green"}/></td>
                         <td><VisibilityIcon className="eye"/><CloseIcon onClick={this.onDeleteVirement.bind(this, virement.id)} className="delete"/></td>
                     </tr>)}

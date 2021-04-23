@@ -2,19 +2,17 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Field, reduxForm, reset} from "redux-form";
 import {Button, Col, Form, Nav, Row} from "react-bootstrap";
-import {renderDatePicker, renderField, renderSelectField} from "../../../Redux/redux-form-const/redux_form_cont";
+import {renderDatePicker, renderField, renderSelectField} from "../../../../Redux/redux-form-const/redux_form_cont";
 import './FindVirementForm.css';
 import SearchIcon from '@material-ui/icons/Search';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ReplayIcon from '@material-ui/icons/Replay';
 import {Link} from "react-router-dom";
 import axios from "axios";
-import {openDialog} from "../../../Redux/Actions/DialogActions";
-import {fetchingData, setInitialFormValues, setViremets} from "../../../Redux/Actions/VirementActions";
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
+import {openDialog} from "../../../../Redux/Actions/DialogActions";
+import {fetchingData, setInitialFormValues, setViremets} from "../../../../Redux/Actions/VirementActions";
 import moment from "moment";
-import {DATA_NOT_FOUND} from "../../../Redux/Constants/constants";
+import {DANGER, DATA_NOT_FOUND} from "../../../../Redux/Constants/constants";
 import {validate} from "./ValidateFindVirementForm";
 import {addDays} from "date-fns";
 
@@ -55,7 +53,7 @@ class FindVirementForm extends Component {
                 this.props.fetchingData(false)
             })
             .catch(error => {
-                this.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:"danger", type: DATA_NOT_FOUND});
+                this.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER, type: DATA_NOT_FOUND});
                 this.props.fetchingData(false);
             });
     }
@@ -67,9 +65,9 @@ class FindVirementForm extends Component {
         this.getVirements();
     }
     render() {
-        const { submitting,handleSubmit, reset, valid} = this.props;
+        const {reset, valid} = this.props;
         const etats = ['ENREGISTRÉ','EN_COURS_DE_SIGNATURE','EN_COURS_DE_TRAITEMENT','ABANDONNÉ','SIGNÉ','ANNULÉ','NON_VALIDÉ','TRAITÉ'];
-        const form =  <Form  onSubmit={this.submit} className="findVirement">
+        const form =  <Form  onSubmit={this.submit}>
             <br/>
             <Row>
                 <Col></Col><Col></Col>

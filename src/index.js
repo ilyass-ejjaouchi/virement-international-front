@@ -12,9 +12,10 @@ import BeneficiareReducer from "./Redux/Reducers/BeneficiareReducer";
 import StepperReducer from "./Redux/Reducers/StepperReducer";
 import {logger} from "redux-logger/src";
 import { reducer as formReducer } from 'redux-form';
+import SnackbarReducer from "./Redux/Reducers/SnackbarReducer";
 
 const rootReducer = combineReducers({
-    dialogReducer,form: formReducer,VirementReducer, BeneficiareReducer,StepperReducer
+    dialogReducer,form: formReducer,VirementReducer, BeneficiareReducer,StepperReducer,SnackbarReducer
 })
 const store = createStore(rootReducer, applyMiddleware(logger))
 

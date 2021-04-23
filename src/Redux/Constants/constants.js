@@ -1,3 +1,7 @@
+//DOMAINE
+export const DOMAINE = "http://localhost:8081/";
+
+// VIREMENTS
 export const GET_COMPTES = "GET_COMPTES";
 export const GET_RATES = "GET_DEVISE";
 export const SELECT_COMPTE_DEBITE = "SELECT_COMPTE_DEBITE";
@@ -11,14 +15,25 @@ export const DELETE_VIREMENT = "DELETE_VIREMENT";
 export const CONFIRMER_VIREMENT = "CONFIRMER_VIREMENT";
 export const DATA_NOT_FOUND = "DATA_NOT_FOUND";
 
-
-
  // Beneficiare Actions
 export const GET_BANQUES = "GET_BANQUES";
 export const GET_COUNTRIES = "GET_COUNTRIES";
+export const SET_CURRENT_DEMANDE = "SET_CURRENT_DEMANDE";
+export const SET_CURRENT_BANQUE = "SET_CURRENT_BANQUE";
+export const SET_DEMANDES_BENEFICIARES = "SET_DEMANDES_BENEFICIARES";
+export const DELETE_DEMANDE_BENEFICIARE = "DELETE_DEMANDE_BENEFICIARE";
 
 // Stepper Actions
 export const SET_ACTIVE_STEP = "SET_ACTIVE_STEP";
 
 // dialog
 export const OPEN_DIALOG = "OPEN_DIALOG";
+
+//Snackbar
+export const OPEN_SNACKBAR = "OPEN_SNACKBAR";
+
+//Style
+export const SUCCESS = "SUCCESS";
+export const DANGER = "DANGER";
+export const WARNING = "WARNING";
+

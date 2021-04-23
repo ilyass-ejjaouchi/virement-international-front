@@ -17,7 +17,7 @@ class ChercherVirement extends Component {
     render() {
         return <div>
             <FindVirementForm></FindVirementForm>
-            <BasicTable></BasicTable>
+            <BasicTable ></BasicTable>
         </div>
     }}
 

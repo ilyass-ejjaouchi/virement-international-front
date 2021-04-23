@@ -2,16 +2,18 @@ import IBAN from "iban";
 
 export const validate = values => {
     const errors = {}
-    if (!values.IBAN) {
-        errors.IBAN = 'vous devez choisir le code IBAN';
-    }else if (!IBAN.isValid(values.IBAN)){
+    if (!values.numeroDeCompte) {
+        errors.numeroDeCompte = 'vous devez saisir le code IBAN';
+    }
+/*    else if (!IBAN.isValid(values.IBAN) || values.IBAN.length != 24){
         errors.IBAN = 'vous devez saisir un IBAN valid';
-    }if (!values.adresse1) {
-        errors.adresse1 = 'vous devez choisir le code IBAN';
+    }*/
+    if (!values.adresse1) {
+        errors.adresse1 = 'vous devez saisir le code IBAN';
     }if (!values.banque) {
-        errors.banque = 'vous devez choisir la banque';
+        errors.banque = 'vous devez saisir la banque';
     }if (!values.libelle) {
-        errors.libelle = 'vous devez choisir le libelle';
+        errors.libelle = 'vous devez saisir le libelle';
     }if (!values.devise) {
         errors.devise = 'vous devez choisir la devise';
     }if (!values.nature) {
