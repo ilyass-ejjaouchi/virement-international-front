@@ -1,0 +1,15 @@
+.itm{
+    right: 0 !important;
+    border-color: #f95e02 !important;
+    color: #f75e1e !important;
+    cursor: pointer;
+}
+.activeItem, .itm:hover{
+    right: 0 !important;
+    border-color: #f95e02 !important;
+    background-color: #f95e02 !important ;
+    color: white !important;
+}
+.disabled{
+    cursor: not-allowed;
+}

@@ -9,6 +9,8 @@ import {renderSelectField,renderField} from "../../../Redux/redux-form-const/red
 import {fetchingData, getRates} from "../../../Redux/Actions/VirementActions";
 import {openDialog} from "../../../Redux/Actions/DialogActions";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+import {Redirect} from "react-router-dom";
+
 import {
     getBanques,
     getCountries, setCurrentBanque,
@@ -45,14 +47,19 @@ const mapStateToProps = state => {
         initialValues: state.BeneficiareReducer.formValues,
         currentDemande: state.BeneficiareReducer.currentDemande,
         currentBanque: state.BeneficiareReducer.currentBanque,
+        isLogged: state.AuthenticationReducer.isLogged,
+        token: state.AuthenticationReducer.token,
     };
 };
 
 class BeneficiareForm extends Component {
+
     componentDidMount() {
-        this.getCountries();
-        this.getBanques();
-        this.fetchRates();
+        if (this.props.isLogged){
+            this.getCountries();
+            this.getBanques();
+            this.fetchRates();
+        }
     }
 
     constructor() {
@@ -67,7 +74,7 @@ class BeneficiareForm extends Component {
             .catch(err => {});
     }
     getBanques(){
-        axios.get(DOMAINE+'banques')
+        axios.get(DOMAINE+'banques', {headers: { Authorization: this.props.token }})
             .then( response => {
                 this.props.getBanques(response.data);}
             )
@@ -75,7 +82,7 @@ class BeneficiareForm extends Component {
             });
     }
     fetchRates(){
-        axios.get(DOMAINE +'comptes/currencies')
+        axios.get(DOMAINE +'comptes/currencies',{headers: { Authorization: this.props.token }})
             .then( response => {
                 this.props.getRates(response.data);
             })
@@ -107,7 +114,7 @@ class BeneficiareForm extends Component {
     createBeneficiare(data){
         this.props.fetchingData(true);
         const that = this
-        axios.post(DOMAINE+'beneficiares',null, { params: data})
+        axios.post(DOMAINE+'beneficiares',null, { params: data, headers: {Authorization: this.props.token}})
             .then(function (res) {
                 that.props.setCurrentDemande(parseInt(res.data.id));
                 that.props.fetchingData(false);
@@ -123,6 +130,7 @@ class BeneficiareForm extends Component {
             });
     }
     render() {
+        if (!this.props.isLogged) return <Redirect to="/" />
         const {pristine, submitting,valid } = this.props;
         const spinner = <LoadingSpinner></LoadingSpinner>;
         const form =  <Form onSubmit={this.submit}>

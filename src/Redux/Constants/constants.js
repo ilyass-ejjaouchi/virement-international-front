@@ -1,8 +1,15 @@
+
+//Authentication
+export const SET_TOKEN = "SET_TOKEN";
+export const SET_IS_LOGGED = "SET_IS_LOGGED";
+export const SET_IDENTIFIANT = "SET_IDENTIFIANT";
+
 //DOMAINE
 export const DOMAINE = "http://localhost:8081/";
 
 // VIREMENTS
 export const GET_COMPTES = "GET_COMPTES";
+export const GET_CURRENT_USER_COMPTES = "GET_CURRENT_USER_COMPTES";
 export const GET_RATES = "GET_DEVISE";
 export const SELECT_COMPTE_DEBITE = "SELECT_COMPTE_DEBITE";
 export const SELECT_COMPTE_CREDITE = "SELECT_COMPTE_CREDITE";
@@ -14,6 +21,10 @@ export const SET_VIREMENTS = "SET_VIREMENTS";
 export const DELETE_VIREMENT = "DELETE_VIREMENT";
 export const CONFIRMER_VIREMENT = "CONFIRMER_VIREMENT";
 export const DATA_NOT_FOUND = "DATA_NOT_FOUND";
+export const SET_CURRENT_PAGE_NUMBER = "SET_CURRENT_PAGE_NUMBER";
+export const SET_CURRENT_PAGE_SIZE = "SET_CURRENT_PAGE_SIZE";
+export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
+export const SET_PARAMS = "SET_PARAMS";
 
  // Beneficiare Actions
 export const GET_BANQUES = "GET_BANQUES";
@@ -27,7 +38,11 @@ export const DELETE_DEMANDE_BENEFICIARE = "DELETE_DEMANDE_BENEFICIARE";
 export const SET_ACTIVE_STEP = "SET_ACTIVE_STEP";
 
 // dialog
-export const OPEN_DIALOG = "OPEN_DIALOG";
+export const OPEN_DIALOG = "OPEN_DIALOG"
+
+// Password model
+export const OPEN_PASSWORD_MODEL= "OPEN_PASSWORD_MODEL";
+export const SET_ERROR_MSG= "SET_ERROR_MSG";
 
 //Snackbar
 export const OPEN_SNACKBAR = "OPEN_SNACKBAR";

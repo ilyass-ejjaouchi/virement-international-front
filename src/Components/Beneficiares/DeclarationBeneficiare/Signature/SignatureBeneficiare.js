@@ -55,9 +55,8 @@ class SignatureBeneficiare extends Component {
         this.props.history.push('/beneficiares/recaputilatif');
     };
     render() {
-        if (!this.formValue) return <div>
-            <Redirect to="/beneficiares" />
-        </div>;
+        if (!this.props.isLogged) return <Redirect to="/" />
+        if (!this.formValue) return <Redirect to="/beneficiares" />
         const sigBeneficiare = <Container className="recap">
             <Row className="top">
                 <Col><b>Nature: </b>  {this.formValue.nature}</Col>
@@ -109,6 +108,8 @@ const mapStateToProps = state => {
         activeStep: state.StepperReducer.activeStep,
         currentBanque: state.BeneficiareReducer.currentBanque,
         currentDemande: state.BeneficiareReducer.currentDemande,
+        isLogged: state.AuthenticationReducer.isLogged,
+        token: state.AuthenticationReducer.token,
     };
 };
 

@@ -3,8 +3,8 @@ import {
     GET_BANQUES,
     GET_COUNTRIES,
     GET_RATES, SET_CURRENT_BANQUE,
-    SET_CURRENT_DEMANDE, SET_DEMANDES_BENEFICIARES,
-    SET_INITIAL_FORM_VALUES
+    SET_CURRENT_DEMANDE, SET_CURRENT_PAGE_NUMBER, SET_CURRENT_PAGE_SIZE, SET_DEMANDES_BENEFICIARES,
+    SET_INITIAL_FORM_VALUES, SET_TOTAL_PAGES
 } from "../Constants/constants";
 
 const initialState = {
@@ -15,7 +15,10 @@ const initialState = {
     formValues: null,
     currentDemande:null,
     currentBanque:null,
-    demandesBeneficiares:[]
+    demandesBeneficiares:[],
+    currentPageNumber:0,
+    currentPageSize:5,
+    totalPages: null,
 };
 
 function BeneficiareReducer(state = initialState, action) {
@@ -60,6 +63,21 @@ function BeneficiareReducer(state = initialState, action) {
             return {
                 ...state,
                 demandesBeneficiares: action.payload
+            }
+        case SET_CURRENT_PAGE_SIZE:
+            return {
+                ...state,
+                currentPageSize: action.payload
+            }
+        case SET_CURRENT_PAGE_NUMBER:
+            return {
+                ...state,
+                currentPageNumber: action.payload
+            }
+        case SET_TOTAL_PAGES:
+            return {
+                ...state,
+                totalPages: action.payload
             }
         default:
             return state;

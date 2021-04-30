@@ -3,22 +3,26 @@ import {Field, reduxForm} from 'redux-form';
 import {Button, Col, Row} from "react-bootstrap";
 import axios from "axios";
 import {connect} from "react-redux";
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {validate} from './ValidateForm';
 import {
     fetchingData,
-    getComptes,
+    getComptes, getCurrentUserComptes,
     getRates,
     selectCompteCredite,
-    selectCompteDebite, selectDateExecution, setCurrentVirement, setInitialFormValues
+    selectCompteDebite,
+    selectDateExecution,
+    setCurrentVirement,
+    setInitialFormValues
 } from "../../../Redux/Actions/VirementActions";
 import {openDialog} from "../../../Redux/Actions/DialogActions";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+
 import {
-    renderSelectField,
     renderCheckboxField,
+    renderDatePicker,
     renderField,
-    renderDatePicker
+    renderSelectField
 } from "../../../Redux/redux-form-const/redux_form_cont";
 import moment from "moment";
 import {setActiveStep} from "../../../Redux/Actions/StepperActions";
@@ -30,7 +34,9 @@ import {addDays} from "date-fns";
 import {DANGER} from "../../../Redux/Constants/constants";
 
 function mapDispatchToProps(dispatch) {
-    return {getComptes: comptes => dispatch(getComptes(comptes)),
+    return {
+            getComptes: comptes => dispatch(getComptes(comptes)),
+            getCurrentUserComptes: comptes => dispatch(getCurrentUserComptes(comptes)),
             getRates: rates => dispatch(getRates(rates)),
             selectCompteDebite: id => dispatch(selectCompteDebite(id)),
             selectCompteCredite: id => dispatch(selectCompteCredite(id)),
@@ -39,7 +45,7 @@ function mapDispatchToProps(dispatch) {
             selectDateExecution: date => dispatch(selectDateExecution(date)),
             setActiveStep : step => dispatch(setActiveStep(step)),
             setInitialFormValues : data => dispatch(setInitialFormValues(data)),
-            setCurrentVirement: idVirement => dispatch(setCurrentVirement(idVirement)),
+            setCurrentVirement: idVirement => dispatch(setCurrentVirement(idVirement))
     }};
 const mapStateToProps = state => {
     return {
@@ -54,22 +60,32 @@ const mapStateToProps = state => {
             activeStep: state.StepperReducer.activeStep,
             initialValues: state.VirementReducer.formValues,
             idVirement: state.VirementReducer.idcurrentVirement,
+            isLogged: state.AuthenticationReducer.isLogged,
+            token: state.AuthenticationReducer.token,
     };
 };
 
 class CreateVirement extends Component {
 
-    fetchComptes(){
+    fetchCurrentUserComptes(){
         let that = this;
-        axios.get('http://localhost:8081/comptes')
+        axios.get('http://localhost:8081/currentUserComptes',{ headers: { Authorization: this.props.token }})
+            .then( response => {
+                this.props.getCurrentUserComptes(response.data)
+            })
+            .catch(error => {that.props.openDialog({body: error, show: true, title: "Erreur!!", style:DANGER})});
+    }
+    fetchAllComptes(){
+        let that = this;
+        axios.get('http://localhost:8081/comptes',{ headers: { Authorization: this.props.token }})
             .then( response => {
                 this.props.getComptes(response.data)
             })
-            .catch(error => {that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})});
+            .catch(error => {that.props.openDialog({body: error, show: true, title: "Erreur!!", style:DANGER})});
     }
     fetchRates(){
         let that = this;
-        axios.get('http://localhost:8081/comptes/currencies')
+        axios.get('http://localhost:8081/comptes/currencies', { headers: { Authorization: this.props.token }})
             .then( response => {
                 this.props.getRates(response.data);
             })
@@ -89,7 +105,7 @@ class CreateVirement extends Component {
     createVirement(data){
         this.props.fetchingData(true);
         let that = this;
-        axios.post('http://localhost:8081/virements',null, { params: data})
+        axios.post('http://localhost:8081/virements',null, { params: data, headers:{ Authorization: this.props.token }})
             .then(function (response) {
                 that.props.fetchingData(false)
                 that.handleNext();
@@ -122,10 +138,14 @@ class CreateVirement extends Component {
         this.props.selectDateExecution(moment(e).format('YYYY-MM-DD'));
     }
     componentDidMount() {
-        this.props.setActiveStep(0);
-        this.fetchComptes();
-        this.fetchRates();
-        this.props.setInitialFormValues({});
+        if (this.props.isLogged){
+            this.props.setActiveStep(0);
+            this.fetchAllComptes();
+            this.fetchCurrentUserComptes();
+            this.fetchRates();
+            this.props.setInitialFormValues({});
+        }
+
     }
 
     submit = (e) => {
@@ -141,9 +161,11 @@ class CreateVirement extends Component {
         this.props.history.push('/virements/signature');
     };
 
+
     render() {
         const {submitting, invalid, reset} = this.props;
         const spinner = <LoadingSpinner></LoadingSpinner>;
+        if (!this.props.isLogged) return <Redirect to="/" />
         const form = <form onSubmit={ this.submit }>
             <br/><Row>
                 <Col><h4>Demander un Virement</h4><hr/></Col>

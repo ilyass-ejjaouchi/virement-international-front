@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Field, reduxForm, reset} from "redux-form";
+import {Field, reduxForm, reset, submit} from "redux-form";
 import {Button, Col, Form, Nav, Row} from "react-bootstrap";
 import {renderDatePicker, renderField, renderSelectField} from "../../../../Redux/redux-form-const/redux_form_cont";
 import './FindVirementForm.css';
@@ -10,9 +10,14 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {openDialog} from "../../../../Redux/Actions/DialogActions";
-import {fetchingData, setInitialFormValues, setViremets} from "../../../../Redux/Actions/VirementActions";
+import {
+    fetchingData, setCurrentPageNumber, setCurrentPageSize,
+    setInitialFormValues, setParams,
+    setTotalPages,
+    setViremets
+} from "../../../../Redux/Actions/VirementActions";
 import moment from "moment";
-import {DANGER, DATA_NOT_FOUND} from "../../../../Redux/Constants/constants";
+import {DANGER, DATA_NOT_FOUND, DOMAINE} from "../../../../Redux/Constants/constants";
 import {validate} from "./ValidateFindVirementForm";
 import {addDays} from "date-fns";
 
@@ -20,19 +25,27 @@ function mapDispatchToProps(dispatch) {
     return {
         openDialog: o => dispatch(openDialog(o)),
         setViremets: virements => dispatch(setViremets(virements)),
+        setTotalPages: nbr => dispatch(setTotalPages(nbr)),
         fetchingData: cd => dispatch(fetchingData(cd)),
-        setInitialCreateVirementForm: cd => dispatch(setInitialFormValues(cd)),
+        setParams: params => dispatch(setParams(params)),
+        setInitialFormValues: value => dispatch(setInitialFormValues(value)),
+        setCurrentPageNumber: value => dispatch(setCurrentPageNumber(value))
     }};
 const mapStateToProps = state => {
     return {
         formValues: state.form.findVirements.values,
-        virements: state.VirementReducer.virements
+        virements: state.VirementReducer.virements,
+        currentPageNumber: state.VirementReducer.currentPageNumber,
+        currentPageSize: state.VirementReducer.currentPageSize,
+        totalPages: state.VirementReducer.totalPages,
+        token: state.AuthenticationReducer.token,
     };
 };
 
 class FindVirementForm extends Component {
 
     getVirements(){
+        this.props.setCurrentPageNumber(0);
         const params = {};
         const data = this.props.formValues;
         if (data.status){
@@ -46,28 +59,34 @@ class FindVirementForm extends Component {
         if (data.dateFin) {
             params.dateMax =moment(data.dateFin).format('YYYY-MM-DD')
         };
+        params.page = 0;
+        params.size = 5;
         this.props.fetchingData(true)
-        axios.get('http://localhost:8081/virements',{ params: params})
+        this.props.setInitialFormValues(data);
+        this.props.setParams(params);
+        axios.get(DOMAINE + 'virements',{  headers: { Authorization: this.props.token }, params: params})
             .then( response => {
-                this.props.setViremets(response.data)
+                this.props.setViremets(response.data.content)
+                this.props.setTotalPages(response.data.totalPages)
                 this.props.fetchingData(false)
             })
             .catch(error => {
+                console.log(error)
                 this.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER, type: DATA_NOT_FOUND});
                 this.props.fetchingData(false);
             });
     }
     resetCreateVirementForm = (e)=>{
-        this.props.setInitialCreateVirementForm({});
+        this.props.setInitialFormValues({});
     }
-    submit = (e)=>{
-        e.preventDefault();
-        this.getVirements();
+    onSubmit =() =>{
+       this.getVirements();
     }
+
     render() {
-        const {reset, valid} = this.props;
+        const {reset, valid, handleSubmit} = this.props;
         const etats = ['ENREGISTRÉ','EN_COURS_DE_SIGNATURE','EN_COURS_DE_TRAITEMENT','ABANDONNÉ','SIGNÉ','ANNULÉ','NON_VALIDÉ','TRAITÉ'];
-        const form =  <Form  onSubmit={this.submit}>
+        const form =  <Form onSubmit={handleSubmit(this.onSubmit)}>
             <br/>
             <Row>
                 <Col></Col><Col></Col>
@@ -97,16 +116,6 @@ class FindVirementForm extends Component {
                 </Col>
                 <Col><Field component={renderField} type="number" name="montantMin" label="Montant Min" /></Col>
                 <Col><Field component={renderField} type="number" name="montantMax" label="Montant Max" /></Col>
-    {/*          <Col>
-                    <Autocomplete
-                        id="free-solo-demo"
-                        freeSolo
-                        options={films.map((v) => v.title)}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Reference" margin="normal" variant="outlined" />
-                        )}
-                    />
-                </Col>  */}
             </Row>
             <br/>
             <Row>
@@ -119,7 +128,9 @@ class FindVirementForm extends Component {
         return <div>
             {form}
         </div>
-    }}
+
+    }
+}
 
 FindVirementForm = connect(
     mapStateToProps,

@@ -6,11 +6,17 @@ import {
     FETCHING_DATA,
     SELECT_DATE_EXECUTION,
     SET_INITIAL_FORM_VALUES,
-    SET_CURRENT_VIREMENT, SET_VIREMENTS, DELETE_VIREMENT, CONFIRMER_VIREMENT
+    SET_CURRENT_VIREMENT,
+    SET_VIREMENTS,
+    DELETE_VIREMENT,
+    CONFIRMER_VIREMENT,
+    SET_CURRENT_PAGE_NUMBER,
+    SET_CURRENT_PAGE_SIZE, SET_TOTAL_PAGES, SET_PARAMS, GET_CURRENT_USER_COMPTES
 } from "../Constants/constants";
 
 const initialState = {
     comptes:[],
+    currentUserComptes:[],
     comptesDebite:[],
     comptesCredite:[],
     rates:[],
@@ -21,7 +27,11 @@ const initialState = {
     date: null,
     formValues: null,
     idcurrentVirement: null,
-    virements: null
+    virements: null,
+    currentPageNumber:0,
+    currentPageSize:5,
+    totalPages: null,
+    params: null
 };
 
 function VirementReducer(state = initialState, action) {
@@ -30,8 +40,13 @@ function VirementReducer(state = initialState, action) {
             return {
                 ...state,
                 comptes: action.payload,
-                comptesDebite: action.payload,
-                comptesCredite: action.payload,
+                comptesCredite: action.payload
+            }
+        case GET_CURRENT_USER_COMPTES:
+            return {
+                ...state,
+                currentUserComptes: action.payload,
+                comptesDebite: action.payload
             }
         case GET_RATES:
             return {
@@ -49,7 +64,7 @@ function VirementReducer(state = initialState, action) {
             const compteCredite = action.payload;
             return {
                 ...state,
-                comptesDebite: [...state.comptes.filter(c => c !== compteCredite)],
+                comptesDebite: [...state.currentUserComptes.filter(c => c !== compteCredite)],
                 currentCompteCredite: compteCredite
             }
         case SELECT_DATE_EXECUTION:
@@ -88,6 +103,26 @@ function VirementReducer(state = initialState, action) {
             return {
                 ...state,
                 virements: action.payload
+            }
+        case SET_CURRENT_PAGE_NUMBER:
+            return {
+                ...state,
+                currentPageNumber: action.payload
+            }
+        case SET_CURRENT_PAGE_SIZE:
+            return {
+                ...state,
+                currentPageSize: action.payload
+            }
+        case SET_TOTAL_PAGES:
+            return {
+                ...state,
+                totalPages: action.payload
+            }
+        case SET_PARAMS:
+            return {
+                ...state,
+                params: action.payload
             }
         default:
             return state;

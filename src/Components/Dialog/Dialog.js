@@ -45,12 +45,14 @@ class ConnectedModel extends Component {
             .then(res => {
                 this.props.openDialog({show:false})
                 this.props.resetVirementForm({});
-                this.props.setViremets(res.data)
+                this.props.setViremets(res.data.content)
                 /*this.props.history.push('/virements');
                 this.props.setActiveStep(0)*/
             })
             .catch(err => {
-                const errorResponse = err.response.data;
+                console.log(err.response)
+                console.log(err)
+                const errorResponse = err.response.data.content;
                 this.props.openDialog({body: errorResponse.message, show: true, title: "Erreur!!", style:"danger", type: DATA_NOT_FOUND});
             });
     }
@@ -92,7 +94,7 @@ class ConnectedModel extends Component {
         else if (this.props.style === WARNING)  this.style = 'warning';
 
         return <div>
-            <Modal show={this.props.show} onHide={this.handleClose}className={this.style}>
+            <Modal show={this.props.show} onHide={this.handleClose} className={this.style}>
                 <Modal.Header closeButton>
                     <Modal.Title id="title"><b>{this.props.title}</b></Modal.Title>
                 </Modal.Header>

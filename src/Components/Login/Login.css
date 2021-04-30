@@ -1,0 +1,21 @@
+.btnLogin{
+    width: 100%;
+    border-color: #f95e02 !important;
+    background-color: #f95e02 !important ;
+    color: white !important;
+}
+.loginForm{
+    margin-top: 10%;
+}
+.user{
+    width: 100px;
+    height: 100px;
+    margin-right: auto;
+}
+/*
+.borderForm{
+    padding: 10px;
+    border: 4px solid #f95e02;
+    border-radius: 25px;
+}
+*/

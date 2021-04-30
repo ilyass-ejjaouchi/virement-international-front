@@ -1,35 +1,51 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {DANGER, DELETE_DEMANDE_BENEFICIARE} from "../../../../Redux/Constants/constants";
+import {DANGER, DELETE_DEMANDE_BENEFICIARE, DOMAINE} from "../../../../Redux/Constants/constants";
 import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
 import {Alert, Table} from "react-bootstrap";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
-import {fetchingData, setCurrentDemande, setDemandesBeneficiares} from "../../../../Redux/Actions/BeneficiareActions";
+import './BeneficiareTable.css';
+import {
+    fetchingData,
+    setCurrentDemande,
+    setCurrentPageNumber,
+    setDemandesBeneficiares, setTotalPages
+} from "../../../../Redux/Actions/BeneficiareActions";
 import {openDialog} from "../../../../Redux/Actions/DialogActions";
-import {ABANDONNÉ, ANNULÉ, NON_VALIDÉ} from "../../../../Redux/Constants/EtatVirement";
+import {ABANDONNÉ, ANNULÉ} from "../../../../Redux/Constants/EtatVirement";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import FindBeneficiarePagination from "../FindBeneficiarePagination/FindBeneficiarePagination";
 
 function mapDispatchToProps(dispatch) {
     return {
         setDemandesBeneficiares: id => dispatch(setDemandesBeneficiares(id)),
         setCurrentDemande: id => dispatch(setCurrentDemande(id)),
         fetchingData: cd => dispatch(fetchingData(cd)),
+        setCurrentPageNumber: nbr => dispatch(setCurrentPageNumber(nbr)),
+        setTotalPages: nbr => dispatch(setTotalPages(nbr)),
         openDialog: cd => dispatch(openDialog(cd)),
     }};
 const mapStateToProps = state => {
     return {
-        demandes: state.BeneficiareReducer.demandesBeneficiares
+        demandes: state.BeneficiareReducer.demandesBeneficiares,
+        currentPageSize: state.BeneficiareReducer.currentPageSize,
+        totalPages: state.BeneficiareReducer.totalPages,
+        token: state.AuthenticationReducer.token,
     };
 };
 
 class BeneficiareTable extends Component {
 
     getDemandes(){
+        const params= {}
+        params.size = this.props.currentPageSize
+        params.page = 0
         this.props.fetchingData(true)
-        axios.get('http://localhost:8081/beneficiares')
+        axios.get(DOMAINE + 'beneficiares', { params: params, headers: { Authorization: this.props.token }})
             .then( response => {
+                this.props.setTotalPages(response.data.totalPages)
                 this.props.setDemandesBeneficiares(response.data)
                 this.props.fetchingData(false)
             })
@@ -49,8 +65,8 @@ class BeneficiareTable extends Component {
     }
     render() {
         if (this.props.isFetching) return <LoadingSpinner/>
-        if (!this.props.demandes) return <Alert variant="danger" className="alertMsg"><b>DÉSOLÉ AUCUNE DONNÉE À AFFICHER</b></Alert>
-        if (this.props.demandes.length === 0)
+        if (!this.props.demandes.content) return <Alert variant="danger" className="alertMsg"><b>DÉSOLÉ AUCUNE DONNÉE À AFFICHER</b></Alert>
+        if (this.props.demandes.content.length === 0)
             return <Alert variant="warning" className="alertMsg"><b>DÉSOLÉ AUCUNE DONNÉE À AFFICHER</b></Alert>
         const table = <div>
             <br/>
@@ -68,12 +84,12 @@ class BeneficiareTable extends Component {
                 </tr>
                 </thead>
                 <tbody>
-                {   this.props.demandes.map((demande,index) =>
+                {   this.props.demandes.content.map((demande,index) =>
                     <tr key={index}>
                         <td>{demande.compte.banque.bic}</td>
                         <td>{demande.compte.iban}</td>
                         <td>{demande.libelle}</td>
-                        <td>{demande.type}</td>
+                        <td className="text-center"><span className={demande.type === "Autre"?"autre":"benef"}>{demande.type}</span></td>
                         <td>{demande.devise}</td>
                         <td>{demande.adresse1}</td>
                         <td>{demande.etat}<FiberManualRecordIcon className={(demande.etat === ANNULÉ ||demande.etat === ABANDONNÉ)? "red":"green"}/></td>
@@ -81,8 +97,13 @@ class BeneficiareTable extends Component {
                     </tr>)}
                 </tbody>
             </Table>
+        </div>;
+        let pagination = null;
+        if (this.props.totalPages > 1) pagination = <FindBeneficiarePagination/>
+        return <div>
+            {table}
+            {pagination}
         </div>
-        return <div>{table}</div>
    }
 }
 

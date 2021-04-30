@@ -2,19 +2,26 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import FindVirementForm from "./FindVirementForm/FindVirementForm";
 import BasicTable from "./VirementTable/VirementTable";
+import {openDialog} from "../../../Redux/Actions/DialogActions";
+import {Redirect} from "react-router-dom";
+
 
 function mapDispatchToProps(dispatch) {
-    return {}};
+    return {
+        openDialog: o => dispatch(openDialog(o)),
+    }};
 const mapStateToProps = state => {
-    return {};
+    return {
+        findVirementForm: state.form.findVirements,
+        isLogged: state.AuthenticationReducer.isLogged,
+        token: state.AuthenticationReducer.token,
+    };
 };
 
 class ChercherVirement extends Component {
 
-    constructor() {
-        super();
-    }
     render() {
+        if (!this.props.isLogged) return <Redirect to="/" />
         return <div>
             <FindVirementForm></FindVirementForm>
             <BasicTable ></BasicTable>

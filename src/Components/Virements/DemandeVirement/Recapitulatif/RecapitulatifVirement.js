@@ -8,8 +8,9 @@ import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import {setActiveStep} from "../../../../Redux/Actions/StepperActions";
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import CustomStepper from "../../../Stepper/CustomStepper";
-import {Redirect} from "react-router-dom";
+import {Redirect, Switch} from "react-router-dom";
 import {setInitialFormValues} from "../../../../Redux/Actions/VirementActions";
+import CustomNavbar from "../../../Navbar/CustomNavbar";
 
 class RecapitulatifVirement extends Component {
     formValue = this.props.formStates;
@@ -31,6 +32,7 @@ class RecapitulatifVirement extends Component {
         this.props.history.push('/virements');
     };
     render() {
+        if (!this.props.isLogged) return <Redirect to="/" />
         if (!this.props.currentCompteDebite) return <div>
             <Redirect to="/virements" />
         </div>;
@@ -72,8 +74,10 @@ class RecapitulatifVirement extends Component {
                     <Col sm={2}>{this.formValue.justificatif}</Col>
                 </Row>
                 <Row className="top">
+                    <Col>
                         <Button className="btnEdition float-right" onClick={this.onPrintVirement} variant="warning" size="sm"><img src={pdfIcon} alt="print"/>{' '}Imprimer</Button>
                         <Button className="btnRejete float-right" onClick={this.onQuitt} variant="danger" size="sm"><DeleteRoundedIcon style={{fontSize: 20}}/>Quitter</Button>
+                    </Col>
                 </Row>
             </Container>
         </div>
@@ -93,6 +97,8 @@ const mapStateToProps = state => {
         currentCompteCredite: state.VirementReducer.currentCompteCredite,
         currentCompteDebite: state.VirementReducer.currentCompteDebite,
         formStates: state.VirementReducer.formValues,
+        isLogged: state.AuthenticationReducer.isLogged,
+        token: state.AuthenticationReducer.token,
     };
 };
 

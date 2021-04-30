@@ -5,10 +5,7 @@
 .lien{
     font-weight: bold;
 }
-.lien:hover{
-    color: #f38f67 !important;
-}
-.lien:active,.lien:focus{
+.lien:active,.lien:focus,.lien:hover{
     color: #f75e1e !important;
 }
 .badge{

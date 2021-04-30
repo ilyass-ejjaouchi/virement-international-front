@@ -3,6 +3,8 @@ import {connect} from "react-redux";
 import FindBeneficiareForm from "./FindBeneficiareForm/FindBeneficiareForm";
 import BeneficiareTable from "./BeneficiareTable/BeneficiareTable";
 import {Container} from "react-bootstrap";
+import {Redirect} from "react-router-dom";
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -10,7 +12,9 @@ function mapDispatchToProps(dispatch) {
     }};
 const mapStateToProps = state => {
     return {
-        demandesBeneficiares: state.BeneficiareReducer.demandesBeneficiares
+        demandesBeneficiares: state.BeneficiareReducer.demandesBeneficiares,
+        isLogged: state.AuthenticationReducer.isLogged,
+        token: state.AuthenticationReducer.token,
     };
 };
 
@@ -20,6 +24,7 @@ class ChercherBeneficiare extends Component {
         super();
     }
     render() {
+        if (!this.props.isLogged) return <Redirect to="/" />
         return <Container>
                 <FindBeneficiareForm/>
                 <BeneficiareTable/>

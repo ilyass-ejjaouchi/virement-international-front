@@ -31,9 +31,8 @@ class RecapitulatifBeneficiare extends Component {
         this.props.history.push('/beneficiares/recaputilatif');
     };
     render() {
-        if (!this.formValue) return <div>
-            <Redirect to="/beneficiares" />
-        </div>;
+        if (!this.props.isLogged) return <Redirect to="/" />
+        if (!this.formValue) return <Redirect to="/beneficiares" />;
         const sig = <Container className="recap">
             <CustomSnackbar></CustomSnackbar>
             <Row className="top">
@@ -82,7 +81,9 @@ const mapStateToProps = state => {
     return {
         formValues: state.BeneficiareReducer.formValues,
         activeStep: state.StepperReducer.activeStep,
-        currentBanque: state.BeneficiareReducer.currentBanque
+        currentBanque: state.BeneficiareReducer.currentBanque,
+        isLogged: state.AuthenticationReducer.isLogged,
+        token: state.AuthenticationReducer.token,
     };
 };
 

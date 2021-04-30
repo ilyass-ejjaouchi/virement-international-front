@@ -1,31 +1,43 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Alert, Button, Nav, Table} from "react-bootstrap";
+import {Alert, Table} from "react-bootstrap";
 import './VirementTable.css';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CloseIcon from '@material-ui/icons/Close';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import {setCurrentVirement} from "../../../../Redux/Actions/VirementActions";
+import {
+    fetchingData,
+    setCurrentPageNumber,
+    setCurrentVirement,
+    setViremets
+} from "../../../../Redux/Actions/VirementActions";
 import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
 import {openDialog} from "../../../../Redux/Actions/DialogActions";
 import {DANGER, DELETE_VIREMENT} from "../../../../Redux/Constants/constants";
 import {ABANDONNÉ, ANNULÉ, NON_VALIDÉ} from "../../../../Redux/Constants/EtatVirement";
+import FindVirementPagination from "../FindVirementPagination/FindVirementPagination";
 
 function mapDispatchToProps(dispatch) {
     return {
         openDialog: cd => dispatch(openDialog(cd)),
         setCurrentVirement: id => dispatch(setCurrentVirement(id)),
+        setCurrentPageNumber: nbr => dispatch(setCurrentPageNumber(nbr)),
+        setViremets: virements => dispatch(setViremets(virements)),
+        fetchingData: cd => dispatch(fetchingData(cd)),
     }};
 const mapStateToProps = state => {
     return {
         virements: state.VirementReducer.virements,
-        isFetching: state.VirementReducer.isFetching
+        isFetching: state.VirementReducer.isFetching,
+        totalPages: state.VirementReducer.totalPages,
+        currentPageNumber: state.VirementReducer.currentPageNumber,
+        params: state.VirementReducer.params
     };
 };
 
 class ChercherVirement extends Component {
-
     componentDidMount() {
+        console.log(this.props.params);
     }
 
     onDeleteVirement= (id)=>{
@@ -70,7 +82,12 @@ class ChercherVirement extends Component {
                 </tbody>
             </Table>
         </div>
-        return <div>{table}</div>
+        let pagination = null;
+        if (this.props.totalPages > 1) pagination = <FindVirementPagination/>
+        return <div>
+            {table}
+            {pagination}
+        </div>
     }}
 
 ChercherVirement = connect(
