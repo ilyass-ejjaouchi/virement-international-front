@@ -1,4 +1,3 @@
-import './App.css';
 import {Container} from 'react-bootstrap';
 import React from "react";
 import CustomNavbar from './Components/Navbar/CustomNavbar';
@@ -14,6 +13,7 @@ import RecapitulatifBeneficiare
 import ChercherBeneficiare from "./Components/Beneficiares/ChercherBeneficiare/ChercherBeneficiare";
 import Login from "./Components/Login/Login";
 import SignatureVirement from "./Components/Virements/DemandeVirement/Signature/SignatureVirement";
+import './App.css';
 
 class App extends React.Component {
 

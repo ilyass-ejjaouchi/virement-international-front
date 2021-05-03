@@ -4,6 +4,7 @@ import {Alert, Table} from "react-bootstrap";
 import './VirementTable.css';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CloseIcon from '@material-ui/icons/Close';
+import { withRouter } from "react-router";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import {
     fetchingData,
@@ -16,6 +17,7 @@ import {openDialog} from "../../../../Redux/Actions/DialogActions";
 import {DANGER, DELETE_VIREMENT} from "../../../../Redux/Constants/constants";
 import {ABANDONNÉ, ANNULÉ, NON_VALIDÉ} from "../../../../Redux/Constants/EtatVirement";
 import FindVirementPagination from "../FindVirementPagination/FindVirementPagination";
+import {setActiveStep} from "../../../../Redux/Actions/StepperActions";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -23,6 +25,7 @@ function mapDispatchToProps(dispatch) {
         setCurrentVirement: virement => dispatch(setCurrentVirement(virement)),
         setCurrentPageNumber: nbr => dispatch(setCurrentPageNumber(nbr)),
         setViremets: virements => dispatch(setViremets(virements)),
+        setActiveStep : step => dispatch(setActiveStep(step)),
         fetchingData: cd => dispatch(fetchingData(cd)),
     }};
 const mapStateToProps = state => {
@@ -40,10 +43,15 @@ class ChercherVirement extends Component {
         console.log(this.props.params);
     }
 
-    onDeleteVirement= (id)=>{
-        this.props.setCurrentVirement({id: id})
+    onDeleteVirement= (virement)=>{
+        this.props.setCurrentVirement(virement)
         this.props.openDialog({body: "ÊTES-VOUS SÛR DE VOULOIR SUPPRIMER CE VIREMENT", show: true,
             title: "ATTENTION !", style:DANGER, type: DELETE_VIREMENT});
+    }
+    onSeeDetails = (virement)=>{
+        this.props.setCurrentVirement(virement)
+        this.props.setActiveStep(1);
+        this.props.history.push('/virements/signature');
     }
     render() {
         if (this.props.isFetching) return <LoadingSpinner/>
@@ -77,7 +85,7 @@ class ChercherVirement extends Component {
                         <td>{virement.contreValeur+' '+virement.devise}</td>
                         <td>{virement.motif}</td>
                         <td>{virement.etat+' '}<FiberManualRecordIcon className={(virement.etat === ANNULÉ ||virement.etat === ABANDONNÉ ||virement.etat ===NON_VALIDÉ)? "red":"green"}/></td>
-                        <td><VisibilityIcon className="eye"/><CloseIcon onClick={this.onDeleteVirement.bind(this, virement.id)} className="delete"/></td>
+                        <td><VisibilityIcon onClick={this.onSeeDetails.bind(this, virement)} className="eye"/><CloseIcon onClick={this.onDeleteVirement.bind(this, virement)} className="delete"/></td>
                     </tr>)}
                 </tbody>
             </Table>
@@ -95,4 +103,4 @@ ChercherVirement = connect(
     mapDispatchToProps
 )(ChercherVirement);
 
-export default ChercherVirement;
+export default withRouter(ChercherVirement);

@@ -28,6 +28,7 @@ const mapStateToProps = state => {
 
 class Login extends Component {
     login (user){
+        const that = this;
         this.props.setIsFetching(true);
         axios.post(DOMAINE + 'login',user)
             .then(res => {
@@ -39,8 +40,8 @@ class Login extends Component {
                 this.props.history.push('/virements')
             })
             .catch(function (error) {
-                this.props.setIsFetching(false);
-                this.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})
+                that.props.setIsFetching(false);
+                that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})
             });
     }
     submit =(user)=>{

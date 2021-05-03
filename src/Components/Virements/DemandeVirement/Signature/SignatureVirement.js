@@ -13,6 +13,7 @@ import PasswordModal from "../../../PasswordModal/PasswordModal";
 import {openPasswordModel, setErrorMsg} from "../../../../Redux/Actions/PasswordModelActions";
 import axios from "axios";
 import {openSnackbar} from "../../../../Redux/Actions/SnackbarActions";
+import {setInitialFormValues} from "../../../../Redux/Actions/VirementActions";
 
 class SignatureVirement extends Component {
     componentDidMount() {
@@ -26,6 +27,19 @@ class SignatureVirement extends Component {
     };
 
     onEditVirement = () => {
+        /*const virement = this.props.currentVirement
+        this.props.setInitialFormValues({
+            compteCredite: virement.compteCredite.numeroCompte,
+            compteDebite:  virement.compteDebite.numeroCompte,
+            contreValeur:  virement.contreValeur,
+            devise: virement.default,
+            modeImputation: virement.modeImputation,
+            montant: virement.montant,
+            motif: virement.motif,
+            refClient: virement.compteDebite.client.referenceClient,
+            retenue: virement.retenue,
+            typeViremen: virement.type
+        })*/
         this.handlePrevious();
     };
 
@@ -121,6 +135,7 @@ function mapDispatchToProps(dispatch) {
         setActiveStep: step => dispatch(setActiveStep(step)),
         openPasswordModel: cd => dispatch(openPasswordModel(cd)),
         openSnackbar: o => dispatch(openSnackbar(o)),
+        setInitialFormValues: o => dispatch(setInitialFormValues(o)),
         setErrorMsg: err => dispatch(setErrorMsg(err)),
     }};
 const mapStateToProps = state => {

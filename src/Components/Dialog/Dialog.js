@@ -52,20 +52,18 @@ class ConnectedModel extends Component {
                 this.props.setActiveStep(0)*/
             })
             .catch(err => {
-                console.log(err)
-                //this.props.openDialog({body: err, show: true, title: "Erreur!!", style:"danger", type: DATA_NOT_FOUND});
+                this.props.openDialog({body: err.response.data.message, show: true, title: "Erreur!!", style:"danger", type: DATA_NOT_FOUND});
             });
     }
     deleteDemande(id){
-        const url = DOMAINE+`beneficiares/${id}`;
-        axios.delete(url)
+        const url = DOMAINE+`deleteBeneficiares/${id}`;
+        axios.post(url, null,{ headers: { Authorization: this.props.token}})
             .then(res => {
                 this.props.openDialog({show:false})
                 this.props.setDemandesBeneficiares(res.data)
             })
             .catch(err => {
-                const errorResponse = err.response.data;
-                this.props.openDialog({body: errorResponse.message, show: true, title: "Erreur!!", style:"danger"});
+                this.props.openDialog({body: err.response.data.message, show: true, title: "Erreur!!", style:"danger"});
             });
     }
 
