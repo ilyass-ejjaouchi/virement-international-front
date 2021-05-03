@@ -39,6 +39,7 @@ const mapStateToProps = state => {
         currentPageSize: state.VirementReducer.currentPageSize,
         totalPages: state.VirementReducer.totalPages,
         token: state.AuthenticationReducer.token,
+        comptesDebite: state.VirementReducer.comptesDebite,
     };
 };
 
@@ -53,6 +54,7 @@ class FindVirementForm extends Component {
         };
         if (data.montantMin) { params.montantMin = data.montantMin };
         if (data.montantMax) { params.montantMax = data.montantMax };
+        if (data.compte) { params.numeroCompte = data.compte };
         if (data.dateDebut) {
             params.dateMin = moment(data.dateDebut).format('YYYY-MM-DD')
         };
@@ -99,6 +101,8 @@ class FindVirementForm extends Component {
                 <Col xs={6}>
                     <Field name="compte" component={renderSelectField}>
                         <option value="">Tous les comptes</option>
+                        {this.props.comptesDebite.map(compte =>
+                            <option key={compte.numeroCompte} value={compte.numeroCompte}>{compte.iban}</option>)}
                     </Field>
                 </Col>
                 <Col xs={3}><Field component={renderDatePicker} minDate={moment().toDate()} maxDate={addDays(new Date(), 90)} placeholder="Date de debut" name="dateDebut"/></Col>
