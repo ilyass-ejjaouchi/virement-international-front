@@ -59,7 +59,7 @@ const mapStateToProps = state => {
             isFetching: state.VirementReducer.isFetching,
             activeStep: state.StepperReducer.activeStep,
             initialValues: state.VirementReducer.formValues,
-            idVirement: state.VirementReducer.idcurrentVirement,
+            currentVirement: state.VirementReducer.currentVirement,
             isLogged: state.AuthenticationReducer.isLogged,
             token: state.AuthenticationReducer.token,
     };
@@ -99,7 +99,7 @@ class CreateVirement extends Component {
                 this.props.change('contreValeur', response.data.rates.deviseCredite);
             })
             .catch(error => {});*/
-        this.props.change('contreValeur', value*2);
+        this.props.change('contreValeur', value);
     }
 
     createVirement(data){
@@ -109,11 +109,12 @@ class CreateVirement extends Component {
             .then(function (response) {
                 that.props.fetchingData(false)
                 that.handleNext();
-                that.props.setCurrentVirement(response.data.id);
+                that.props.setCurrentVirement(response.data);
                 /*that.props.reset();
                 that.props.openDialog({body: "les données ont bien été enregistrées", show: true, title: "Succès", style:"success"})*/
             })
             .catch(function (error) {
+                that.props.fetchingData(false)
                 that.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})
             });
     }
@@ -151,9 +152,11 @@ class CreateVirement extends Component {
     submit = (e) => {
         e.preventDefault();
         const data = this.props.createVirement.values;
+        let idCurrentVirement;
+        if (this.props.currentVirement) idCurrentVirement = this.props.currentVirement.id
         this.props.setInitialFormValues(data);
         this.handleNext();
-        this.createVirement({...data, date:this.props.date, etat: ENREGISTRÉ, id: this.props.idVirement})
+        this.createVirement({...data, date:this.props.date, etat: ENREGISTRÉ, id: idCurrentVirement})
     }
 
     handleNext = () => {

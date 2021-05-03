@@ -16,6 +16,10 @@ import axios from "axios";
 import jwt from "jwt-decode";
 
 class SignatureVirement extends Component {
+    componentDidMount() {
+        console.log(this.props.currentVirement)
+    }
+
     formValue = this.props.formStates;
     onConfirmeVirement = () => {
         this.props.openPasswordModel(true)
@@ -124,6 +128,7 @@ const mapStateToProps = state => {
         date: state.VirementReducer.date,
         currentCompteCredite: state.VirementReducer.currentCompteCredite,
         currentCompteDebite: state.VirementReducer.currentCompteDebite,
+        currentVirement: state.VirementReducer.currentVirement,
         formStates: getFormValues('createVirement')(state),
         activeStep: state.StepperReducer.activeStep,
         isLogged: state.AuthenticationReducer.isLogged,

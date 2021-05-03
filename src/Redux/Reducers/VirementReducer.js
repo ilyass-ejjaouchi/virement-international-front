@@ -26,7 +26,7 @@ const initialState = {
     isFetching: false,
     date: null,
     formValues: null,
-    idcurrentVirement: null,
+    currentVirement: null,
     virements: null,
     currentPageNumber:0,
     currentPageSize:5,
@@ -87,7 +87,7 @@ function VirementReducer(state = initialState, action) {
         case SET_CURRENT_VIREMENT:
             return {
                 ...state,
-                idcurrentVirement: action.payload
+                currentVirement: action.payload
             }
         case SET_VIREMENTS:
             return {
