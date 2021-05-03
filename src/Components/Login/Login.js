@@ -8,26 +8,30 @@ import jwt from 'jwt-decode';
 import userIcon from "../../media/user3.png";
 import axios from "axios";
 import {DANGER, DOMAINE} from "../../Redux/Constants/constants";
-import {setIdentifiant, setIsLogged, setToken} from "../../Redux/Actions/AuthenticationActions";
+import {setIdentifiant, setIsFetching, setIsLogged, setToken} from "../../Redux/Actions/AuthenticationActions";
 import {openDialog} from "../../Redux/Actions/DialogActions";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 function mapDispatchToProps(dispatch) {
     return {
         setToken: token => dispatch(setToken(token)),
         openDialog: token => dispatch(openDialog(token)),
         setIsLogged: token => dispatch(setIsLogged(token)),
+        setIsFetching: cd => dispatch(setIsFetching(cd)),
         setIdentifiant: identifiant => dispatch(setIdentifiant(identifiant)),
     }};
 const mapStateToProps = state => {
     return {
-        demandes: state.BeneficiareReducer.demandesBeneficiares
+        isFetching: state.AuthenticationReducer.isFetching,
     };
 };
 
 class Login extends Component {
     login (user){
+        this.props.setIsFetching(true);
         axios.post(DOMAINE + 'login',user)
             .then(res => {
+                this.props.setIsFetching(false);
                 const token = res.headers.authorization;
                 this.props.setToken(res.headers.authorization);
                 this.props.setIdentifiant(jwt(token).sub);
@@ -35,6 +39,7 @@ class Login extends Component {
                 this.props.history.push('/virements')
             })
             .catch(function (error) {
+                this.props.setIsFetching(false);
                 this.props.openDialog({body: error.message, show: true, title: "Erreur!!", style:DANGER})
             });
     }
@@ -43,6 +48,7 @@ class Login extends Component {
     }
     render() {
         const { valid, handleSubmit, pristine, reset, submitting } = this.props
+        if (this.props.isFetching) return <LoadingSpinner/>
         return <div>
             <Form className="loginForm" onSubmit={handleSubmit(this.submit)}>
                 <Row className="justify-content-md-center">

@@ -7,14 +7,13 @@ import CreateVirement from "./Components/Virements/DemandeVirement/VirementForm"
 import CustomDialog from "./Components/Dialog/Dialog";
 import BeneficiareForm from "./Components/Beneficiares/DeclarationBeneficiare/BeneficiareForm";
 import RecapitulatifVirement from "./Components/Virements/DemandeVirement/Recapitulatif/RecapitulatifVirement";
-import SignatureVirement from "./Components/Virements/DemandeVirement/Signature/SignatureVirement";
 import ChercherVirement from "./Components/Virements/ChercherVirement/ChercherVirement";
 import SignatureBeneficiare from "./Components/Beneficiares/DeclarationBeneficiare/Signature/SignatureBeneficiare";
 import RecapitulatifBeneficiare
     from "./Components/Beneficiares/DeclarationBeneficiare/Recapitulatif/RecapitulatifBeneficiare";
 import ChercherBeneficiare from "./Components/Beneficiares/ChercherBeneficiare/ChercherBeneficiare";
 import Login from "./Components/Login/Login";
-import CustomNavBar from "./Components/CustomNavBar/CustomNavBar";
+import SignatureVirement from "./Components/Virements/DemandeVirement/Signature/SignatureVirement";
 
 class App extends React.Component {
 

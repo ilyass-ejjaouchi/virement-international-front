@@ -32,17 +32,19 @@ const mapStateToProps = state => {
              body: state.dialogReducer.body,
              style: state.dialogReducer.style,
              type: state.dialogReducer.type,
-             idcurrentVirement: state.VirementReducer.idcurrentVirement,
-             idcurrentDemande: state.BeneficiareReducer.currentDemande
+             currentVirement: state.VirementReducer.currentVirement,
+             idcurrentDemande: state.BeneficiareReducer.currentDemande,
+             token: state.AuthenticationReducer.token,
     };
 };
 
 class ConnectedModel extends Component {
 
     deleteVirement(id){
-        const url = DOMAINE+`virements/${id}`;
-        axios.delete(url)
+        const url = DOMAINE+`deleteVirements/${id}`;
+        axios.post(url, null,{ headers: { Authorization: this.props.token}})
             .then(res => {
+                console.log(res.data)
                 this.props.openDialog({show:false})
                 this.props.resetVirementForm({});
                 this.props.setViremets(res.data.content)
@@ -50,10 +52,8 @@ class ConnectedModel extends Component {
                 this.props.setActiveStep(0)*/
             })
             .catch(err => {
-                console.log(err.response)
                 console.log(err)
-                const errorResponse = err.response.data.content;
-                this.props.openDialog({body: errorResponse.message, show: true, title: "Erreur!!", style:"danger", type: DATA_NOT_FOUND});
+                //this.props.openDialog({body: err, show: true, title: "Erreur!!", style:"danger", type: DATA_NOT_FOUND});
             });
     }
     deleteDemande(id){
@@ -73,7 +73,7 @@ class ConnectedModel extends Component {
     onContinue = () => {
         switch (this.props.type) {
             case DELETE_VIREMENT:
-                this.deleteVirement(this.props.idcurrentVirement); break;
+                this.deleteVirement(this.props.currentVirement.id); break;
             case DELETE_DEMANDE_BENEFICIARE:
                 this.deleteDemande(this.props.idcurrentDemande); break;
             case CONFIRMER_VIREMENT:

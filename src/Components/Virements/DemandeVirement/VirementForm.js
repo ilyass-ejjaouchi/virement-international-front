@@ -108,8 +108,8 @@ class CreateVirement extends Component {
         axios.post('http://localhost:8081/virements',null, { params: data, headers:{ Authorization: this.props.token }})
             .then(function (response) {
                 that.props.fetchingData(false)
-                that.handleNext();
                 that.props.setCurrentVirement(response.data);
+                that.handleNext();
                 /*that.props.reset();
                 that.props.openDialog({body: "les données ont bien été enregistrées", show: true, title: "Succès", style:"success"})*/
             })
@@ -155,7 +155,6 @@ class CreateVirement extends Component {
         let idCurrentVirement;
         if (this.props.currentVirement) idCurrentVirement = this.props.currentVirement.id
         this.props.setInitialFormValues(data);
-        this.handleNext();
         this.createVirement({...data, date:this.props.date, etat: ENREGISTRÉ, id: idCurrentVirement})
     }
 

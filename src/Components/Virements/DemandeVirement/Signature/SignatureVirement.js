@@ -3,24 +3,22 @@ import { connect } from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {openDialog} from "../../../../Redux/Actions/DialogActions";
 import {Button, Col, Container, Row} from "react-bootstrap";
-import {getFormValues} from "redux-form";
 import {setActiveStep} from "../../../../Redux/Actions/StepperActions";
 import pdfIcon from "../../../../media/pdf.png";
-import {DANGER, DELETE_VIREMENT, DOMAINE} from "../../../../Redux/Constants/constants";
+import {DANGER, DELETE_VIREMENT, DOMAINE, SUCCESS} from "../../../../Redux/Constants/constants";
 import CustomStepper from "../../../Stepper/CustomStepper";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
 import PasswordModal from "../../../PasswordModal/PasswordModal";
 import {openPasswordModel, setErrorMsg} from "../../../../Redux/Actions/PasswordModelActions";
 import axios from "axios";
-import jwt from "jwt-decode";
+import {openSnackbar} from "../../../../Redux/Actions/SnackbarActions";
 
 class SignatureVirement extends Component {
     componentDidMount() {
         console.log(this.props.currentVirement)
     }
 
-    formValue = this.props.formStates;
     onConfirmeVirement = () => {
         this.props.openPasswordModel(true)
         // changer l'etat d'enregistrer vers signe
@@ -53,6 +51,7 @@ class SignatureVirement extends Component {
             .then(res => {
                 that.props.openPasswordModel(false);
                 this.handleNext();
+                that.props.openSnackbar({openSnackbar:true, message:"la demande a été signée avec success", style:SUCCESS});
             })
             .catch(function (error) {
                 that.props.setErrorMsg("le code secret est incorrect");
@@ -60,43 +59,45 @@ class SignatureVirement extends Component {
     };
     render() {
         if (!this.props.isLogged) return <Redirect to="/" />
-        if (!this.props.currentCompteDebite) return <div>
+        if (!this.props.currentVirement) return <div>
             <Redirect to="/virements" />
         </div>;
+        const virement = this.props.currentVirement;
         const sig = <Container className="recap">
             <Row className="top">
-                <Col xs={5}><b>Compte à débiter : </b>  {this.props.currentCompteDebite.iban}</Col>
-                <Col xs={5}><b>Bénéficiaire : </b> {this.props.currentCompteCredite.client.prenom +' '+this.props.currentCompteCredite.iban} </Col>
+                <Col xs={5}><b>Compte à débiter : </b>  {virement.compteDebite.iban}</Col>
+                <Col xs={5}><b>Bénéficiaire :
+                </b> {virement.compteCredite.client.nom +' ' +virement.compteCredite.client.prenom +' ' +virement.compteCredite.iban} </Col>
             </Row>
             <Row className="top">
                 <Col><b>Transfert : </b></Col>
             </Row>
             <Row className="top">
-                <Col xs={5}><b>Date d'éxécution : </b>  {this.props.date}</Col>
-                <Col xs={5}><b>Motif de virement : </b>  {this.formValue.motif} </Col>
+                <Col xs={5}><b>Date d'éxécution : </b>  {virement.dateExecution}</Col>
+                <Col xs={5}><b>Motif de virement : </b>  {virement.motif} </Col>
             </Row>
             <Row className="top">
-                <Col xs={5}><b>Montant : </b>  {this.formValue.montant}</Col>
-                <Col xs={5}><b>Référence Client : </b> {this.formValue.refClient} </Col>
+                <Col xs={5}><b>Montant : </b>  {virement.montant}</Col>
+                <Col xs={5}><b>Référence Client : </b> {virement.compteCredite.referenceClient} </Col>
             </Row>
             <Row className="top">
-                <Col xs={5}><b>Contre Valeur : </b>  {this.formValue.contreValeur}</Col>
-                <Col xs={5}><b>Devise: </b> {this.formValue.devise} </Col>
+                <Col xs={5}><b>Contre Valeur : </b>  {virement.contreValeur}</Col>
+                <Col xs={5}><b>Devise: </b> {virement.devise} </Col>
             </Row>
             <Row className="top">
                 <Col xs={5}><b>Change/Justificatif : </b> </Col>
             </Row>
             <Row className="top">
                 <Col sm={4}><b>Mode d'imputation des frais :</b></Col>
-                <Col sm={2}>{this.formValue.modeImputation}</Col>
+                <Col sm={2}>{virement.modeImputation}</Col>
             </Row>
             <Row className="top">
                 <Col sm={4}><b>Retenue :</b></Col>
-                <Col sm={2}>{this.formValue.retenue}</Col>
+                <Col sm={2}>{virement.retenue}</Col>
             </Row>
             <Row className="top">
                 <Col sm={4}><b>Justificatif :</b></Col>
-                <Col sm={2}>{this.formValue.justificatif}</Col>
+                <Col sm={2}>{virement.justificatif}</Col>
             </Row>
             <Row className="top">
                 <Col>
@@ -119,17 +120,12 @@ function mapDispatchToProps(dispatch) {
         openDialog: o => dispatch(openDialog(o)),
         setActiveStep: step => dispatch(setActiveStep(step)),
         openPasswordModel: cd => dispatch(openPasswordModel(cd)),
+        openSnackbar: o => dispatch(openSnackbar(o)),
         setErrorMsg: err => dispatch(setErrorMsg(err)),
     }};
 const mapStateToProps = state => {
     return {
-        comptesCredite: state.VirementReducer.comptesCredite,
-        comptesDebite: state.VirementReducer.comptesDebite,
-        date: state.VirementReducer.date,
-        currentCompteCredite: state.VirementReducer.currentCompteCredite,
-        currentCompteDebite: state.VirementReducer.currentCompteDebite,
         currentVirement: state.VirementReducer.currentVirement,
-        formStates: getFormValues('createVirement')(state),
         activeStep: state.StepperReducer.activeStep,
         isLogged: state.AuthenticationReducer.isLogged,
         token: state.AuthenticationReducer.token,

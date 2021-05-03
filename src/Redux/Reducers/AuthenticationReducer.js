@@ -1,9 +1,10 @@
-import {SET_IDENTIFIANT, SET_IS_LOGGED, SET_TOKEN} from "../Constants/constants";
+import {FETCHING_DATA, SET_IDENTIFIANT, SET_IS_LOGGED, SET_TOKEN} from "../Constants/constants";
 
 const initialState = {
     token: null,
     isLogged: false,
-    identifiant: null
+    identifiant: null,
+    isFetching: false,
 };
 
 function AuthenticationReducer(state = initialState, action) {
@@ -22,6 +23,11 @@ function AuthenticationReducer(state = initialState, action) {
             return {
                 ...state,
                 identifiant: action.payload
+            }
+        case FETCHING_DATA:
+            return {
+                ...state,
+                isFetching: action.payload
             }
         default:
             return state;

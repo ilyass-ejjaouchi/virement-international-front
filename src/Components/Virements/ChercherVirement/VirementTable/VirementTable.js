@@ -20,7 +20,7 @@ import FindVirementPagination from "../FindVirementPagination/FindVirementPagina
 function mapDispatchToProps(dispatch) {
     return {
         openDialog: cd => dispatch(openDialog(cd)),
-        setCurrentVirement: id => dispatch(setCurrentVirement(id)),
+        setCurrentVirement: virement => dispatch(setCurrentVirement(virement)),
         setCurrentPageNumber: nbr => dispatch(setCurrentPageNumber(nbr)),
         setViremets: virements => dispatch(setViremets(virements)),
         fetchingData: cd => dispatch(fetchingData(cd)),
@@ -41,7 +41,7 @@ class ChercherVirement extends Component {
     }
 
     onDeleteVirement= (id)=>{
-        this.props.setCurrentVirement(id);
+        this.props.setCurrentVirement({id: id})
         this.props.openDialog({body: "ÊTES-VOUS SÛR DE VOULOIR SUPPRIMER CE VIREMENT", show: true,
             title: "ATTENTION !", style:DANGER, type: DELETE_VIREMENT});
     }
