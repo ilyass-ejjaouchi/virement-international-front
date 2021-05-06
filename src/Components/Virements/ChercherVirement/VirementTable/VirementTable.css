@@ -6,12 +6,12 @@
     text-align: center !important;
     margin-top: 20px;
 }
-.eye{
+.edit{
     fontSize: 10 !important;
     cursor: pointer;
     margin-right: 10px;
 }
-.eye:hover{
+.edit:hover{
     color: #f95e02;
 }
 .delete{

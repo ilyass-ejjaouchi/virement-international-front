@@ -28,12 +28,7 @@ class PasswordModal extends Component {
     }
     handleClose = () => {this.props.openPasswordModel(false)};
     onHandleClick = (key) => {
-        this.setState({pass: this.state.pass + '' + key},
-           a =>{
-               console.log(this.state)
-           }
-            )
-
+        this.setState({pass: this.state.pass + '' + key})
     };
     handleDelete = () =>{
         if (this.state.pass.length) {

@@ -97,11 +97,8 @@ class BeneficiareForm extends Component {
     submit = (e) => {
         e.preventDefault();
         const data = this.props.beneficiareForm.values
-        console.log(data)
         this.props.setInitialFormValues(data);
         this.createBeneficiare({...data, id: this.props.currentDemande, etat: ENREGISTRÉ});
-        this.props.setActiveStep(1);
-        this.props.history.push('/beneficiares/signature');
     }
     handleNext = () => {
         this.props.setActiveStep(1);
@@ -182,11 +179,6 @@ class BeneficiareForm extends Component {
                         </Field>
                     </Col>
                 </Row>
-               {/* <Row>
-                    <Col><Field component={renderField} type="text" name="routing" label="Routing ou Fedwire number" maxlenght={9}/></Col>
-                    <Col></Col>
-                    <Col></Col>
-                </Row>*/}
             </Form.Group>
             <h4>Compte</h4><hr/>
             <Row>
@@ -197,7 +189,7 @@ class BeneficiareForm extends Component {
                     </Field>
                 </Col>
                 <Col><Field component={renderField} type="text" name="BIC" label="Code BIC" disabled={true}/></Col>
-                <Col><Field component={renderField} type="text" name="numeroDeCompte" label="Code IBAN"/></Col>
+                <Col><Field component={renderField} type="text" name="IBAN" label="Code IBAN"/></Col>
             </Row><br/>
             <div className="form-group">
                  <Button disabled={submitting||!valid} className="btnEnvoyer float-right"

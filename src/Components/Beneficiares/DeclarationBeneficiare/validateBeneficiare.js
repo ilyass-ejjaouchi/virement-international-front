@@ -2,8 +2,8 @@ import IBAN from "iban";
 
 export const validate = values => {
     const errors = {}
-    if (!values.numeroDeCompte) {
-        errors.numeroDeCompte = 'vous devez saisir le code IBAN';
+    if (!values.IBAN) {
+        errors.IBAN = 'vous devez saisir le code IBAN';
     }
 /*    else if (!IBAN.isValid(values.IBAN) || values.IBAN.length != 24){
         errors.IBAN = 'vous devez saisir un IBAN valid';

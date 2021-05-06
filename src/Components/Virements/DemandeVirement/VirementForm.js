@@ -72,14 +72,7 @@ class CreateVirement extends Component {
         axios.get('http://localhost:8081/currentUserComptes',{ headers: { Authorization: this.props.token }})
             .then( response => {
                 this.props.getCurrentUserComptes(response.data)
-            })
-            .catch(error => {that.props.openDialog({body: error, show: true, title: "Erreur!!", style:DANGER})});
-    }
-    fetchAllComptes(){
-        let that = this;
-        axios.get('http://localhost:8081/comptes',{ headers: { Authorization: this.props.token }})
-            .then( response => {
-                this.props.getComptes(response.data)
+                this.props.getComptes(response.data[0].client.beneficiares)
             })
             .catch(error => {that.props.openDialog({body: error, show: true, title: "Erreur!!", style:DANGER})});
     }
@@ -121,12 +114,12 @@ class CreateVirement extends Component {
 
     onSelectCompteCrediter(e){
         const id = e.target.value
-        this.props.selectCompteCredite(this.props.comptes.find(c => c.numeroCompte === parseInt(id)));
+        this.props.selectCompteCredite(id);
     }
 
     onSelectCompteDebiter(e){
         const id = e.target.value;
-        const currentCompteDebite = this.props.comptes.find(c => c.numeroCompte === parseInt(id))
+        const currentCompteDebite = this.props.comptesDebite.find(c => c.numeroCompte === parseInt(id))
         this.props.selectCompteDebite(currentCompteDebite);
         if (currentCompteDebite) this.props.change('refClient', currentCompteDebite.client.referenceClient);
     }
@@ -141,7 +134,6 @@ class CreateVirement extends Component {
     componentDidMount() {
         if (this.props.isLogged){
             this.props.setActiveStep(0);
-            this.fetchAllComptes();
             this.fetchCurrentUserComptes();
             this.fetchRates();
             this.props.setInitialFormValues({});
@@ -187,8 +179,8 @@ class CreateVirement extends Component {
                     <h6>Compte à créditer</h6><hr/>
                     <Field name="compteCredite"  component={renderSelectField} onChange={this.onSelectCompteCrediter.bind(this)}>
                         <option value="">Veuillez choisir le compte à créditer </option>
-                        {this.props.comptesCredite.map(compte =>
-                            <option key={compte.numeroCompte} value={compte.numeroCompte}>{compte.iban}</option>)}
+                        {this.props.comptesCredite.map(benef =>
+                            <option key={benef.id} value={benef.id}>{benef.libelle}</option>)}
                     </Field>
                 </Col>
             </Row><br/>

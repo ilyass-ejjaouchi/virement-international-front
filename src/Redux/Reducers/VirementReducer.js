@@ -46,7 +46,7 @@ function VirementReducer(state = initialState, action) {
             return {
                 ...state,
                 currentUserComptes: action.payload,
-                comptesDebite: action.payload
+                comptesDebite: action.payload,
             }
         case GET_RATES:
             return {

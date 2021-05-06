@@ -8,8 +8,7 @@ import BeneficiareForm from "./Components/Beneficiares/DeclarationBeneficiare/Be
 import RecapitulatifVirement from "./Components/Virements/DemandeVirement/Recapitulatif/RecapitulatifVirement";
 import ChercherVirement from "./Components/Virements/ChercherVirement/ChercherVirement";
 import SignatureBeneficiare from "./Components/Beneficiares/DeclarationBeneficiare/Signature/SignatureBeneficiare";
-import RecapitulatifBeneficiare
-    from "./Components/Beneficiares/DeclarationBeneficiare/Recapitulatif/RecapitulatifBeneficiare";
+import RecapitulatifBeneficiare from "./Components/Beneficiares/DeclarationBeneficiare/Recapitulatif/RecapitulatifBeneficiare";
 import ChercherBeneficiare from "./Components/Beneficiares/ChercherBeneficiare/ChercherBeneficiare";
 import Login from "./Components/Login/Login";
 import SignatureVirement from "./Components/Virements/DemandeVirement/Signature/SignatureVirement";
