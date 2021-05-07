@@ -1,22 +1,24 @@
 import {
-    GET_COMPTES,
-    GET_RATES,
-    SELECT_COMPTE_DEBITE,
-    SELECT_COMPTE_CREDITE,
-    FETCHING_DATA,
-    SELECT_DATE_EXECUTION,
-    SET_INITIAL_FORM_VALUES,
-    SET_CURRENT_VIREMENT,
-    SET_VIREMENTS,
-    DELETE_VIREMENT,
     CONFIRMER_VIREMENT,
+    DELETE_VIREMENT,
+    FETCHING_DATA,
+    GET_COMPTES,
+    GET_CURRENT_USER,
+    GET_RATES,
+    SELECT_COMPTE_CREDITE,
+    SELECT_COMPTE_DEBITE,
+    SELECT_DATE_EXECUTION,
     SET_CURRENT_PAGE_NUMBER,
-    SET_CURRENT_PAGE_SIZE, SET_TOTAL_PAGES, SET_PARAMS, GET_CURRENT_USER_COMPTES
+    SET_CURRENT_PAGE_SIZE,
+    SET_CURRENT_VIREMENT,
+    SET_INITIAL_FORM_VALUES,
+    SET_PARAMS,
+    SET_TOTAL_PAGES,
+    SET_VIREMENTS
 } from "../Constants/constants";
 
 const initialState = {
-    comptes:[],
-    currentUserComptes:[],
+    currentUser:null,
     comptesDebite:[],
     comptesCredite:[],
     rates:[],
@@ -36,17 +38,10 @@ const initialState = {
 
 function VirementReducer(state = initialState, action) {
     switch (action.type) {
-        case GET_COMPTES:
+        case GET_CURRENT_USER:
             return {
                 ...state,
-                comptes: action.payload,
-                comptesCredite: action.payload
-            }
-        case GET_CURRENT_USER_COMPTES:
-            return {
-                ...state,
-                currentUserComptes: action.payload,
-                comptesDebite: action.payload,
+                currentUser: action.payload,
             }
         case GET_RATES:
             return {
@@ -57,14 +52,12 @@ function VirementReducer(state = initialState, action) {
             const compteDebite = action.payload
             return {
                 ...state,
-                comptesCredite: [...state.comptes.filter(c => c !== compteDebite )],
                 currentCompteDebite: compteDebite
             }
         case SELECT_COMPTE_CREDITE:
             const compteCredite = action.payload;
             return {
                 ...state,
-                comptesDebite: [...state.currentUserComptes.filter(c => c !== compteCredite)],
                 currentCompteCredite: compteCredite
             }
         case SELECT_DATE_EXECUTION:

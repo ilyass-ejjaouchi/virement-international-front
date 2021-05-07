@@ -81,7 +81,7 @@ class SignatureVirement extends Component {
             <Row className="top">
                 <Col xs={5}><b>Compte à débiter : </b>  {virement.compteDebite.iban}</Col>
                 <Col xs={5}><b>Bénéficiaire :
-                </b> {virement.compteCredite.client.nom +' ' +virement.compteCredite.client.prenom +' ' +virement.compteCredite.iban} </Col>
+                </b> {virement.compteCredite.iban} </Col>
             </Row>
             <Row className="top">
                 <Col><b>Transfert : </b></Col>

@@ -41,7 +41,7 @@ class RecapitulatifVirement extends Component {
             <Container className="recap">
                 <Row className="top">
                     <Col xs={5}><b>Compte à débiter : </b>  {this.props.currentCompteDebite.iban}</Col>
-                    <Col xs={5}><b>Bénéficiaire : </b> {this.props.currentCompteCredite.client.prenom +' '+this.props.currentCompteCredite.iban} </Col>
+                    <Col xs={5}><b>Bénéficiaire : </b> {this.props.currentCompteCredite.iban} </Col>
                 </Row>
                 <Row className="top">
                     <Col><b>Transfert : </b></Col>

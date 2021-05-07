@@ -7,7 +7,8 @@ import {Link, Redirect} from 'react-router-dom';
 import {validate} from './ValidateForm';
 import {
     fetchingData,
-    getComptes, getCurrentUserComptes,
+    getComptes,
+    getCurrentUser,
     getRates,
     selectCompteCredite,
     selectCompteDebite,
@@ -36,7 +37,7 @@ import {DANGER} from "../../../Redux/Constants/constants";
 function mapDispatchToProps(dispatch) {
     return {
             getComptes: comptes => dispatch(getComptes(comptes)),
-            getCurrentUserComptes: comptes => dispatch(getCurrentUserComptes(comptes)),
+            getCurrentUser: user => dispatch(getCurrentUser(user)),
             getRates: rates => dispatch(getRates(rates)),
             selectCompteDebite: id => dispatch(selectCompteDebite(id)),
             selectCompteCredite: id => dispatch(selectCompteCredite(id)),
@@ -49,9 +50,8 @@ function mapDispatchToProps(dispatch) {
     }};
 const mapStateToProps = state => {
     return {
-            comptesCredite: state.VirementReducer.comptesCredite,
-            comptesDebite: state.VirementReducer.comptesDebite,
             date: state.VirementReducer.date,
+            currentUser: state.VirementReducer.currentUser,
             comptes: state.VirementReducer.comptes,
             rates: state.VirementReducer.rates,
             createVirement: state.form.createVirement,
@@ -67,14 +67,18 @@ const mapStateToProps = state => {
 
 class CreateVirement extends Component {
 
-    fetchCurrentUserComptes(){
+    fetchCurrentUser(){
+        this.props.fetchingData(true);
         let that = this;
-        axios.get('http://localhost:8081/currentUserComptes',{ headers: { Authorization: this.props.token }})
+        axios.get('http://localhost:8081/currentClient',{ headers: { Authorization: this.props.token }})
             .then( response => {
-                this.props.getCurrentUserComptes(response.data)
-                this.props.getComptes(response.data[0].client.beneficiares)
+                this.props.fetchingData(false);
+                this.props.getCurrentUser(response.data)
+                this.props.change('refClient', response.data.referenceClient);
             })
-            .catch(error => {that.props.openDialog({body: error, show: true, title: "Erreur!!", style:DANGER})});
+            .catch(error => {
+                that.props.fetchingData(false);
+                that.props.openDialog({body: error, show: true, title: "Erreur!!", style:DANGER})});
     }
     fetchRates(){
         let that = this;
@@ -114,14 +118,15 @@ class CreateVirement extends Component {
 
     onSelectCompteCrediter(e){
         const id = e.target.value
+        const currentCompteCredite= this.props.currentUser.beneficiares.find(b => b.compte.numeroCompte === parseInt(id))
+        this.props.selectCompteDebite(currentCompteCredite);
         this.props.selectCompteCredite(id);
     }
 
     onSelectCompteDebiter(e){
         const id = e.target.value;
-        const currentCompteDebite = this.props.comptesDebite.find(c => c.numeroCompte === parseInt(id))
+        const currentCompteDebite = this.props.currentUser.comptes.find(c => c.numeroCompte === parseInt(id))
         this.props.selectCompteDebite(currentCompteDebite);
-        if (currentCompteDebite) this.props.change('refClient', currentCompteDebite.client.referenceClient);
     }
 
     onSelectDeviseChange = (e)=>{
@@ -134,7 +139,7 @@ class CreateVirement extends Component {
     componentDidMount() {
         if (this.props.isLogged){
             this.props.setActiveStep(0);
-            this.fetchCurrentUserComptes();
+            this.fetchCurrentUser();
             this.fetchRates();
             this.props.setInitialFormValues({});
         }
@@ -158,8 +163,8 @@ class CreateVirement extends Component {
 
     render() {
         const {submitting, invalid, reset} = this.props;
-        const spinner = <LoadingSpinner></LoadingSpinner>;
         if (!this.props.isLogged) return <Redirect to="/" />
+        if (!this.props.currentUser) return <LoadingSpinner></LoadingSpinner>
         const form = <form onSubmit={ this.submit }>
             <br/><Row>
                 <Col><h4>Demander un Virement</h4><hr/></Col>
@@ -171,7 +176,7 @@ class CreateVirement extends Component {
                     <h6>Compte à débiter</h6><hr/>
                     <Field name="compteDebite" component={renderSelectField} onChange={this.onSelectCompteDebiter.bind(this)}>
                         <option value="">Veuillez choisir le compte à débiter </option>
-                        {this.props.comptesDebite.map(compte =>
+                        {this.props.currentUser.comptes.map(compte =>
                             <option key={compte.numeroCompte} value={compte.numeroCompte}>{compte.iban}</option>)}
                     </Field>
                 </Col>
@@ -179,8 +184,8 @@ class CreateVirement extends Component {
                     <h6>Compte à créditer</h6><hr/>
                     <Field name="compteCredite"  component={renderSelectField} onChange={this.onSelectCompteCrediter.bind(this)}>
                         <option value="">Veuillez choisir le compte à créditer </option>
-                        {this.props.comptesCredite.map(benef =>
-                            <option key={benef.id} value={benef.id}>{benef.libelle}</option>)}
+                        {this.props.currentUser.beneficiares.map(benef =>
+                            <option key={benef.id} value={benef.compte.numeroCompte}>{benef.libelle}</option>)}
                     </Field>
                 </Col>
             </Row><br/>
@@ -250,16 +255,16 @@ class CreateVirement extends Component {
                 <Row>
                     <Col><Field component={renderField}  type="text" label="Organisme hospitalier" name="organismeHospitalier"/></Col>
                     <Col><Field component={renderField}  type="text" label="Période de couverture" name="periodeCouverture" /></Col>
-                </Row><br/>*/}
+                </Row><br/>
+                */}
             <Row>
                 <Col><Button disabled={submitting || invalid} className="btnEnvoyer float-right" size="sm" type="submit"
                                     variant="primary">SUIVANT{' '}<NavigateNextIcon style={{ fontSize: 20 }}/></Button></Col>
             </Row><br/>
         </form>
-        if (this.props.isFetching) return <div>{spinner}</div>
-        else return <div>
+        return <div>
                      <CustomStepper></CustomStepper>
-                     {form}
+                        {form}
                     </div>
     }}
 

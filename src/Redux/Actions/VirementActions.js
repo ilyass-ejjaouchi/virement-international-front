@@ -9,14 +9,19 @@ import {
     SET_CURRENT_VIREMENT,
     SET_FORM_HAS_ERROR,
     SET_INITIAL_FORM_VALUES,
-    SET_CURRENT_PAGE_NUMBER, SET_CURRENT_PAGE_SIZE, SET_TOTAL_PAGES, SET_PARAMS, GET_CURRENT_USER_COMPTES
+    SET_CURRENT_PAGE_NUMBER,
+    SET_CURRENT_PAGE_SIZE,
+    SET_TOTAL_PAGES,
+    SET_PARAMS,
+    GET_CURRENT_USER_COMPTES,
+    GET_CURRENT_USER
 } from "../Constants/constants";
 
 export function getComptes(payload) {
     return { type: GET_COMPTES, payload };
 }
-export function getCurrentUserComptes(payload) {
-    return { type: GET_CURRENT_USER_COMPTES, payload };
+export function getCurrentUser(payload) {
+    return { type: GET_CURRENT_USER, payload };
 }
 export function getRates(payload) {
     return { type: GET_RATES, payload };

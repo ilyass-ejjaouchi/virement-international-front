@@ -9,7 +9,7 @@ export const DOMAINE = "http://localhost:8081/";
 
 // VIREMENTS
 export const GET_COMPTES = "GET_COMPTES";
-export const GET_CURRENT_USER_COMPTES = "GET_CURRENT_USER_COMPTES";
+export const GET_CURRENT_USER = "GET_CURRENT_USER";
 export const GET_RATES = "GET_DEVISE";
 export const SELECT_COMPTE_DEBITE = "SELECT_COMPTE_DEBITE";
 export const SELECT_COMPTE_CREDITE = "SELECT_COMPTE_CREDITE";
